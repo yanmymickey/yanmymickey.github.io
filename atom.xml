@@ -575,6 +575,37 @@
   </entry>
   
   <entry>
+    <title>虚拟机与hyper-v冲突</title>
+    <link href="https://yanmymickey.github.io/2020/03/17/Note/%E8%A7%A3%E5%86%B3%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%8Ehyper-v%E5%86%B2%E7%AA%81/"/>
+    <id>https://yanmymickey.github.io/2020/03/17/Note/%E8%A7%A3%E5%86%B3%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%8Ehyper-v%E5%86%B2%E7%AA%81/</id>
+    <published>2020-03-16T16:00:00.000Z</published>
+    <updated>2021-01-16T10:25:59.586Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="虚拟机与hyper-v冲突"><a href="#虚拟机与hyper-v冲突" class="headerlink" title="虚拟机与hyper-v冲突"></a>虚拟机与hyper-v冲突</h1><ul><li>通过命令关闭Hyper-V（控制面板关闭Hyper-V起不到决定性作用，要彻底关闭Hyper-V）</li><li>以管理员身份运行Windows Powershell (管理员)（Windows键+X）</li><li>运行下面命令并重启电脑：</li></ul><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#关闭hype-V</span><br><span class="line">bcdedit &#x2F;set hypervisorlaunchtype off</span><br></pre></td></tr></table></figure><ul><li>想要使用wsl时,下面是相关命令</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#启用hype-V</span><br><span class="line">bcdedit &#x2F;set hypervisorlaunchtype auto start</span><br><span class="line"></span><br><span class="line">#转换ubuntu的wsl版本</span><br><span class="line">wsl --set-version Ubuntu 2</span><br><span class="line"></span><br><span class="line">#查询已经安装的wsl版本</span><br><span class="line">wsl -l -V</span><br><span class="line">#或者</span><br><span class="line">wsl --list --version</span><br><span class="line"></span><br><span class="line">#设置wsl默认启动版本</span><br><span class="line">wsl --set-default-version 2</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;虚拟机与hyper-v冲突&quot;&gt;&lt;a href=&quot;#虚拟机与hyper-v冲突&quot; class=&quot;headerlink&quot; title=&quot;虚拟机与hyper-v冲突&quot;&gt;&lt;/a&gt;虚拟机与hyper-v冲突&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;通过命令关闭Hyper-V（控制面板关闭Hyper-V起不到决定性作用，要彻底关闭Hyper-V）&lt;/li&gt;
+&lt;li&gt;以管理员身份运行Windows Powershell (管理员)（Windows键+X）&lt;/li&gt;
+&lt;li&gt;运行下面命令并重启电脑：&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="Note" scheme="https://yanmymickey.github.io/categories/Note/"/>
+    
+    <category term="Windows" scheme="https://yanmymickey.github.io/categories/Note/Windows/"/>
+    
+    
+    <category term="Note" scheme="https://yanmymickey.github.io/tags/Note/"/>
+    
+    <category term="windows" scheme="https://yanmymickey.github.io/tags/windows/"/>
+    
+    <category term="hyper-v" scheme="https://yanmymickey.github.io/tags/hyper-v/"/>
+    
+  </entry>
+  
+  <entry>
     <title>PHP伪协议</title>
     <link href="https://yanmymickey.github.io/2020/03/16/CTF/php%E4%BC%AA%E5%8D%8F%E8%AE%AE/"/>
     <id>https://yanmymickey.github.io/2020/03/16/CTF/php%E4%BC%AA%E5%8D%8F%E8%AE%AE/</id>
@@ -1478,35 +1509,6 @@
     <category term="Note" scheme="https://yanmymickey.github.io/tags/Note/"/>
     
     <category term="php" scheme="https://yanmymickey.github.io/tags/php/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Mysql数据库</title>
-    <link href="https://yanmymickey.github.io/2019/05/20/Note/%E8%A7%A3%E5%86%B3%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%8Ehyper-v%E5%86%B2%E7%AA%81/"/>
-    <id>https://yanmymickey.github.io/2019/05/20/Note/%E8%A7%A3%E5%86%B3%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%8Ehyper-v%E5%86%B2%E7%AA%81/</id>
-    <published>2019-05-19T16:00:00.000Z</published>
-    <updated>2021-01-16T06:42:52.647Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="虚拟机与hyper-v冲突"><a href="#虚拟机与hyper-v冲突" class="headerlink" title="虚拟机与hyper-v冲突"></a>虚拟机与hyper-v冲突</h1><ul><li>通过命令关闭Hyper-V（控制面板关闭Hyper-V起不到决定性作用，要彻底关闭Hyper-V）</li><li>以管理员身份运行Windows Powershell (管理员)（Windows键+X）</li><li>运行下面命令并重启电脑：</li></ul><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#关闭hype-V</span><br><span class="line">bcdedit &#x2F;set hypervisorlaunchtype off</span><br></pre></td></tr></table></figure><ul><li>想要使用wsl时,下面是相关命令</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#启用hype-V</span><br><span class="line">bcdedit &#x2F;set hypervisorlaunchtype auto start</span><br><span class="line"></span><br><span class="line">#转换ubuntu的wsl版本</span><br><span class="line">wsl --set-version Ubuntu 2</span><br><span class="line"></span><br><span class="line">#查询已经安装的wsl版本</span><br><span class="line">wsl -l -V</span><br><span class="line">#或者</span><br><span class="line">wsl --list --version</span><br><span class="line"></span><br><span class="line">#设置wsl默认启动版本</span><br><span class="line">wsl --set-default-version 2</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;虚拟机与hyper-v冲突&quot;&gt;&lt;a href=&quot;#虚拟机与hyper-v冲突&quot; class=&quot;headerlink&quot; title=&quot;虚拟机与hyper-v冲突&quot;&gt;&lt;/a&gt;虚拟机与hyper-v冲突&lt;/h1&gt;&lt;ul&gt;
-&lt;li&gt;通过命令关闭Hyper-V（控制面板关闭Hyper-V起不到决定性作用，要彻底关闭Hyper-V）&lt;/li&gt;
-&lt;li&gt;以管理员身份运行Windows Powershell (管理员)（Windows键+X）&lt;/li&gt;
-&lt;li&gt;运行下面命令并重启电脑：&lt;/li&gt;
-&lt;/ul&gt;</summary>
-    
-    
-    
-    <category term="Note" scheme="https://yanmymickey.github.io/categories/Note/"/>
-    
-    <category term="Mysql" scheme="https://yanmymickey.github.io/categories/Note/Mysql/"/>
-    
-    
-    <category term="Note" scheme="https://yanmymickey.github.io/tags/Note/"/>
-    
-    <category term="mysql" scheme="https://yanmymickey.github.io/tags/mysql/"/>
     
   </entry>
   
