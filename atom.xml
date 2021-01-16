@@ -45,27 +45,6 @@
   </entry>
   
   <entry>
-    <title>Linux 实验 socket网络编程</title>
-    <link href="https://yanmymickey.github.io/2020/11/05/Note/%E5%A4%9C%E7%A5%9E%E5%AE%89%E5%8D%93%E6%A8%A1%E6%8B%9F%E5%99%A8%E6%89%93%E5%BC%80Windows%E7%BB%BF%E5%B1%8Fbug/"/>
-    <id>https://yanmymickey.github.io/2020/11/05/Note/%E5%A4%9C%E7%A5%9E%E5%AE%89%E5%8D%93%E6%A8%A1%E6%8B%9F%E5%99%A8%E6%89%93%E5%BC%80Windows%E7%BB%BF%E5%B1%8Fbug/</id>
-    <published>2020-11-04T16:00:00.000Z</published>
-    <updated>2021-01-16T05:56:38.474Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="夜神模拟器打开后Windows绿屏"><a href="#夜神模拟器打开后Windows绿屏" class="headerlink" title="夜神模拟器打开后Windows绿屏"></a>夜神模拟器打开后Windows绿屏</h1><p>这货没有像vmware一样的异常处理，但是其模拟器运行环境是和vmware差不多的虚拟机,如果Windows开了wsl,将会和wsl的hype-V冲突,导致系统崩溃。</p><a id="more"></a><p>解决办法：</p><ul><li>通过命令关闭Hyper-V（控制面板关闭Hyper-V起不到决定性作用，要彻底关闭Hyper-V）</li><li>以管理员身份运行Windows Powershell (管理员)（Windows键+X）</li><li>运行下面命令并重启电脑：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#关闭hype-V</span><br><span class="line">bcdedit &#x2F;set hypervisorlaunchtype off</span><br></pre></td></tr></table></figure><p>再次打开模拟器就不会绿屏了。</p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;夜神模拟器打开后Windows绿屏&quot;&gt;&lt;a href=&quot;#夜神模拟器打开后Windows绿屏&quot; class=&quot;headerlink&quot; title=&quot;夜神模拟器打开后Windows绿屏&quot;&gt;&lt;/a&gt;夜神模拟器打开后Windows绿屏&lt;/h1&gt;&lt;p&gt;这货没有像vmware一样的异常处理，但是其模拟器运行环境是和vmware差不多的虚拟机,如果Windows开了wsl,将会和wsl的hype-V冲突,导致系统崩溃。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Note" scheme="https://yanmymickey.github.io/categories/Note/"/>
-    
-    
-    <category term="Note" scheme="https://yanmymickey.github.io/tags/Note/"/>
-    
-  </entry>
-  
-  <entry>
     <title>微信小程序百度地图API移动选点</title>
     <link href="https://yanmymickey.github.io/2020/11/05/Note/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%99%BE%E5%BA%A6%E5%9C%B0%E5%9B%BEapi%E7%A7%BB%E5%8A%A8%E9%80%89%E7%82%B9/"/>
     <id>https://yanmymickey.github.io/2020/11/05/Note/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%99%BE%E5%BA%A6%E5%9C%B0%E5%9B%BEapi%E7%A7%BB%E5%8A%A8%E9%80%89%E7%82%B9/</id>
@@ -695,6 +674,27 @@
     <category term="Python" scheme="https://yanmymickey.github.io/tags/Python/"/>
     
     <category term="FlaskSSTI" scheme="https://yanmymickey.github.io/tags/FlaskSSTI/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>夜神模拟器打开后Windows绿屏</title>
+    <link href="https://yanmymickey.github.io/2020/03/15/Note/%E5%A4%9C%E7%A5%9E%E5%AE%89%E5%8D%93%E6%A8%A1%E6%8B%9F%E5%99%A8%E6%89%93%E5%BC%80Windows%E7%BB%BF%E5%B1%8Fbug/"/>
+    <id>https://yanmymickey.github.io/2020/03/15/Note/%E5%A4%9C%E7%A5%9E%E5%AE%89%E5%8D%93%E6%A8%A1%E6%8B%9F%E5%99%A8%E6%89%93%E5%BC%80Windows%E7%BB%BF%E5%B1%8Fbug/</id>
+    <published>2020-03-14T16:00:00.000Z</published>
+    <updated>2021-01-16T10:22:39.114Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="夜神模拟器打开后Windows绿屏"><a href="#夜神模拟器打开后Windows绿屏" class="headerlink" title="夜神模拟器打开后Windows绿屏"></a>夜神模拟器打开后Windows绿屏</h1><p>这货没有像vmware一样的异常处理，但是其模拟器运行环境是和vmware差不多的虚拟机,如果Windows开了wsl,将会和wsl的hype-V冲突,导致系统崩溃。</p><a id="more"></a><p>解决办法：</p><ul><li>通过命令关闭Hyper-V（控制面板关闭Hyper-V起不到决定性作用，要彻底关闭Hyper-V）</li><li>以管理员身份运行Windows Powershell (管理员)（Windows键+X）</li><li>运行下面命令并重启电脑：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#关闭hype-V</span><br><span class="line">bcdedit &#x2F;set hypervisorlaunchtype off</span><br></pre></td></tr></table></figure><p>再次打开模拟器就不会绿屏了。</p>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;夜神模拟器打开后Windows绿屏&quot;&gt;&lt;a href=&quot;#夜神模拟器打开后Windows绿屏&quot; class=&quot;headerlink&quot; title=&quot;夜神模拟器打开后Windows绿屏&quot;&gt;&lt;/a&gt;夜神模拟器打开后Windows绿屏&lt;/h1&gt;&lt;p&gt;这货没有像vmware一样的异常处理，但是其模拟器运行环境是和vmware差不多的虚拟机,如果Windows开了wsl,将会和wsl的hype-V冲突,导致系统崩溃。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Note" scheme="https://yanmymickey.github.io/categories/Note/"/>
+    
+    
+    <category term="Note" scheme="https://yanmymickey.github.io/tags/Note/"/>
     
   </entry>
   
