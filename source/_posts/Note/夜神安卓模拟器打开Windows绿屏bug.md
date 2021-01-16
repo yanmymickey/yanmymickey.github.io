@@ -1,6 +1,6 @@
 ---
-title: Linux 实验 socket网络编程
-date: 2020-11-05
+title: 夜神模拟器打开后Windows绿屏
+date: 2020-03-15
 tags: [Note]
 categories:
 - [Note]
