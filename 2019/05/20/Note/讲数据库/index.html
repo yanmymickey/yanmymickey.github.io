@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="YGm-O0FYtJIJd878GKblZACh8xSr46g0l4F5UDGhoTc">
+  <meta name="baidu-site-verification" content="code-tyOuGzoN3z">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css">
+  <script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yanmymickey.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="Mysql数据库1.熟悉基本的linux下的命令行，运用他们。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql数据库">
+<meta property="og:url" content="https://yanmymickey.github.io/2019/05/20/Note/%E8%AE%B2%E6%95%B0%E6%8D%AE%E5%BA%93/index.html">
+<meta property="og:site_name" content="菜鸡的BLOG">
+<meta property="og:description" content="Mysql数据库1.熟悉基本的linux下的命令行，运用他们。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-05-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-01-16T06:05:06.575Z">
+<meta property="article:author" content="D15h35">
+<meta property="article:tag" content="Note">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://yanmymickey.github.io/2019/05/20/Note/%E8%AE%B2%E6%95%B0%E6%8D%AE%E5%BA%93/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>Mysql数据库 | 菜鸡的BLOG</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XZVDBPC6X7"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XZVDBPC6X7');
+      }
+    </script>
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?633ffcf7a0f511eb45dead6c18798c6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="菜鸡的BLOG" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">菜鸡的BLOG</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">31</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">16</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">58</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Mysql%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">Mysql数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%86%9F%E6%82%89%E5%9F%BA%E6%9C%AC%E7%9A%84linux%E4%B8%8B%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%EF%BC%8C%E8%BF%90%E7%94%A8%E4%BB%96%E4%BB%AC%E3%80%82"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">1.熟悉基本的linux下的命令行，运用他们。</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.0.0.1.1.</span> <span class="nav-text">前言</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-mysql"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">1.mysql</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E8%BF%9B%E5%85%A5%E4%BD%A0%E7%9A%84mysql"><span class="nav-number">1.0.0.2.1.</span> <span class="nav-text">1.进入你的mysql</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E5%B1%95%E7%A4%BA%E4%BD%A0%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.0.0.2.2.</span> <span class="nav-text">2.展示你的数据库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E5%88%9B%E5%BB%BA%E4%BD%A0%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.0.0.2.3.</span> <span class="nav-text">3.创建你的数据库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-%E6%98%BE%E7%A4%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BF%A1%E6%81%AF"><span class="nav-number">1.0.0.2.4.</span> <span class="nav-text">4.显示数据库信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.0.0.2.5.</span> <span class="nav-text">5.删除数据库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-%E9%80%89%E6%8B%A9%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.0.0.2.6.</span> <span class="nav-text">6.选择数据库</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E8%A1%A8"><span class="nav-number">1.0.1.</span> <span class="nav-text">数据表</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E5%88%9B%E5%BB%BA%E8%A1%A8"><span class="nav-number">1.0.1.0.1.</span> <span class="nav-text">1.创建表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E6%9F%A5%E7%9C%8B%E8%A1%A8"><span class="nav-number">1.0.1.0.2.</span> <span class="nav-text">2.查看表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E6%98%BE%E7%A4%BA%E5%88%9B%E5%BB%BA%E8%A1%A8"><span class="nav-number">1.0.1.0.3.</span> <span class="nav-text">3.显示创建表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-%E6%98%BE%E7%A4%BA%E8%A1%A8%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">1.0.1.0.4.</span> <span class="nav-text">4.显示表的结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-%E5%88%A0%E9%99%A4%E8%A1%A8"><span class="nav-number">1.0.1.0.5.</span> <span class="nav-text">5.删除表</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">1.0.2.</span> <span class="nav-text">数据的基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">1.插入数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">2.查询数据</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1%E3%80%81%E6%9F%A5%E8%AF%A2%E4%B8%80%E4%B8%AA%E8%A1%A8%E9%87%8C%E9%9D%A2%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="nav-number">1.0.2.2.0.1.</span> <span class="nav-text">1、查询一个表里面的数据</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2%E3%80%81%E6%9F%A5%E8%AF%A2%E4%B8%80%E4%B8%AA%E8%A1%A8%E9%87%8C%E9%9D%A2%E6%9F%90%E5%AD%97%E6%AE%B5-%E7%9A%84%E6%89%80%E6%9C%89%E6%95%B0%E6%8D%AE"><span class="nav-number">1.0.2.2.0.2.</span> <span class="nav-text">2、查询一个表里面某字段 的所有数据</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-%E6%88%91%E4%BB%AC%E4%B9%9F%E5%8F%AF%E4%BB%A5%E6%A0%B9%E6%8D%AE%E6%9D%A1%E4%BB%B6%E6%9D%A5%E6%9F%A5%E8%AF%A2%E4%BF%A1%E6%81%AF"><span class="nav-number">1.0.2.2.0.3.</span> <span class="nav-text">3.我们也可以根据条件来查询信息</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-%E6%88%91%E4%BB%AC%E4%B9%9F%E5%8F%AF%E4%BB%A5%E6%90%9C%E7%B4%A2"><span class="nav-number">1.0.2.2.0.4.</span> <span class="nav-text">4.我们也可以搜索</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-%E5%AF%B9%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E6%8E%92%E5%BA%8F"><span class="nav-number">1.0.2.2.0.5.</span> <span class="nav-text">5.对数据进行排序</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">3.删除数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE"><span class="nav-number">1.0.2.4.</span> <span class="nav-text">4.修改数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%84%B6%E5%90%8E%E6%88%91%E4%BB%AC%E5%B0%B1%E5%8F%AF%E4%BB%A5%E5%9C%A8phpstrom%E4%B8%AD%E5%B0%9D%E8%AF%95%E8%BF%99%E4%BA%9B%E8%AF%AD%E5%8F%A5%EF%BC%8C%E7%9C%8B%E6%98%AF%E4%B8%8D%E6%98%AF%E4%B8%80%E6%A0%B7%E7%9A%84%E3%80%82"><span class="nav-number">1.0.2.5.</span> <span class="nav-text">然后我们就可以在phpstrom中尝试这些语句，看是不是一样的。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#php%E9%83%A8%E5%88%86"><span class="nav-number">1.0.3.</span> <span class="nav-text">php部分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">连接</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.0.3.1.1.</span> <span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.0.3.1.2.</span> <span class="nav-text">删除数据库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.0.3.1.3.</span> <span class="nav-text">选择数据库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E8%A1%A8"><span class="nav-number">1.0.3.1.4.</span> <span class="nav-text">创建数据表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE%E8%A1%A8"><span class="nav-number">1.0.3.1.5.</span> <span class="nav-text">删除数据表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9C%A8%E6%95%B0%E6%8D%AE%E8%A1%A8%E9%87%8C%E9%9D%A2%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="nav-number">1.0.3.1.6.</span> <span class="nav-text">在数据表里面插入数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE1-1"><span class="nav-number">1.0.3.1.7.</span> <span class="nav-text">查询数据1.1</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE1-2"><span class="nav-number">1.0.3.1.8.</span> <span class="nav-text">查询数据1.2</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE1-3"><span class="nav-number">1.0.3.1.9.</span> <span class="nav-text">查询数据1.3</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE1-3-1"><span class="nav-number">1.0.3.1.10.</span> <span class="nav-text">查询数据1.3</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE"><span class="nav-number">1.0.3.1.11.</span> <span class="nav-text">修改数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="nav-number">1.0.3.1.12.</span> <span class="nav-text">删除数据</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="D15h35"
+      src="/images/while.png">
+  <p class="site-author-name" itemprop="name">D15h35</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yanmymickey" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yanmymickey" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/yanmymickey" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://yanmymickey.github.io/2019/05/20/Note/%E8%AE%B2%E6%95%B0%E6%8D%AE%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/while.png">
+      <meta itemprop="name" content="D15h35">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="菜鸡的BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Mysql数据库
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-05-20 00:00:00" itemprop="dateCreated datePublished" datetime="2019-05-20T00:00:00+08:00">2019-05-20</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-01-16 14:05:06" itemprop="dateModified" datetime="2021-01-16T14:05:06+08:00">2021-01-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Note/" itemprop="url" rel="index"><span itemprop="name">Note</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Note/Mysql/" itemprop="url" rel="index"><span itemprop="name">Mysql</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Mysql数据库"><a href="#Mysql数据库" class="headerlink" title="Mysql数据库"></a>Mysql数据库</h1><h4 id="1-熟悉基本的linux下的命令行，运用他们。"><a href="#1-熟悉基本的linux下的命令行，运用他们。" class="headerlink" title="1.熟悉基本的linux下的命令行，运用他们。"></a>1.熟悉基本的linux下的命令行，运用他们。</h4><a id="more"></a>
+
+<h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h5><p>了解一些名词。（菜鸟教程上解释的很清楚）</p>
+<ul>
+<li><strong>数据库:</strong> 数据库是一些关联表的集合。</li>
+<li><strong>数据表:</strong> 表是数据的矩阵。在一个数据库中的表看起来像一个简单的电子表格。</li>
+<li><strong>列:</strong> 一列(数据元素) 包含了相同的数据, 例如邮政编码的数据。</li>
+<li><strong>行：</strong>一行（=元组，或记录）是一组相关的数据，例如一条用户订阅的数据。</li>
+<li><strong>冗余</strong>：存储两倍数据，冗余降低了性能，但提高了数据的安全性。</li>
+<li><strong>主键</strong>：主键是唯一的。一个数据表中只能包含一个主键。你可以使用主键来查询数据。</li>
+<li><strong>外键：</strong>外键用于关联两个表。</li>
+<li><strong>复合键</strong>：复合键（组合键）将多个列作为一个索引键，一般用于复合索引。</li>
+<li><strong>索引：</strong>使用索引可快速访问数据库表中的特定信息。索引是对数据库表中一列或多列的值进行排序的一种结构。类似于书籍的目录。</li>
+<li><strong>参照完整性:</strong> 参照的完整性要求关系中不允许引用不存在的实体。与实体完整性是关系模型必须满足的完整性约束条件，目的是保证数据的一致性</li>
+<li><strong>表头(header)</strong>: 每一列的名称;</li>
+<li><strong>列(col):</strong> 具有相同数据类型的数据的集合;</li>
+<li><strong>行(row):</strong> 每一行用来描述某条记录的具体信息;</li>
+<li><strong>值(value):</strong> 行的具体信息, 每个值必须与该列的数据类型相同;</li>
+<li><strong>键(key)</strong>: 键的值在当前列中具有唯一性</li>
+</ul>
+<p><strong>退出</strong></p>
+<p><strong>exit</strong> 或 <strong>quit</strong>。</p>
+<h4 id="1-mysql"><a href="#1-mysql" class="headerlink" title="1.mysql"></a><strong>1.mysql</strong></h4><p>MySQL基础知识<br>MySQL经常和“数据库”连在一起读，这很容易对新手造成误解，认为MySQL就是一个数据库</p>
+<p>其实不是这样，MySQL是数据库的集合，MySQL里面有很多数据库</p>
+<p>那么数据是直接存在数据库里的吗？并不，数据库底下还有一个叫做数据表的存储单元</p>
+<p>数据表里面才存储数据。</p>
+<p>打个比方，好比一座大图书馆，就是MySQL，图书馆里面分南库，北库，这就是数据库，</p>
+<p>每个库里面的书都是放在书架上的，书架就是数据表，而放在书架上的很多本书，就是数据</p>
+<p>。这么说，读者应该理解了吧，所以按大小顺序排个序就应该是，</p>
+<p><strong>MySQL&gt;数据库&gt;数据表&gt;数据</strong>，所以我们接下来的内容也是按照这个顺序来展开。（把黑体理解就好）</p>
+<p>前面跟着颜老板把那个环境安装好了，然后就可以使用mysql了。首先打开xshell，</p>
+<h5 id="1-进入你的mysql"><a href="#1-进入你的mysql" class="headerlink" title="1.进入你的mysql"></a>1.进入你的mysql</h5><p><strong>mysql -u root -p</strong> #然后[root@<strong><em>*</em>*</strong> ~]后面输入</p>
+<p>-u 是指user用户名，</p>
+<p>root是你创建了一个root用户，最高管理员进入。</p>
+<p>-p是要你输入你的mysql密码。</p>
+<p>#回车Enter password: 然后输入你的密码</p>
+<p>#（这里你输入的时候是看不见的，linux是有这个保护，以免泄密，windows系统下一般不会</p>
+<p>有这个。输入后然后回车。）</p>
+<p>讲解root为什么，这是管理员登录，可以进行好多操作，增删改查。</p>
+<p>你也可以创建一个用户不是root。然后给他权限，进行登录。具体可以参照</p>
+<p>（菜鸟教程/数据库/mysql/mysql管理），</p>
+<p>就有这个出现，有的版本不一样，但是大致是一样的。</p>
+<p>Welcome to the MySQL monitor. Commands end with ; or \g.<br>Your MySQL connection id is 2<br>Server version: 5.7.25-log MySQL Community Server (GPL)</p>
+<p>Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights</p>
+<p>Oracle is a registered trademark of Oracle Corporation and/or its<br>affiliates. Other names may be trademarks of their respective<br>owners.</p>
+<p>Type ‘help;’ or ‘\h’ for help. Type ‘\c’ to clear the current inpu.</p>
+<p>MySQL [(none)] &gt;</p>
+<p>MySQL [(none)] &gt;这个none是你还没有选择数据库。有的版本有有的没有。</p>
+<p>选择了数据库就是MySQL [(xx)] &gt;.</p>
+<h5 id="2-展示你的数据库"><a href="#2-展示你的数据库" class="headerlink" title="2.展示你的数据库"></a>2.展示你的数据库</h5><p><strong>show databases;</strong> #因为你不知道你刚开始有多少的数据库，所以是databases</p>
+<p><strong>而且一定要记住，输入；</strong>因为之前配环境的时候的语句没有后面加;的习惯，所以菜鸡本鸡刚开始的时候就常常忘记加；导致它以为我还有东西要输入，另起一行。</p>
+<p>出现这四个初始数据库</p>
+<p>+——————–+<br>| Database |<br>+——————- -+<br>| information_schema |<br>| mysql |<br>| performance_schema |<br>| sys |<br>+——————–+</p>
+<h5 id="3-创建你的数据库"><a href="#3-创建你的数据库" class="headerlink" title="3.创建你的数据库"></a>3.创建你的数据库</h5><p><strong>create database XX;</strong> (XX是数据库名)这个数据库名你可以随便取，但是不能取一些关键字，例如create show类似的</p>
+<p>输入后回车然后看见</p>
+<p><strong>Query OK,1 row affected (0.00 sec)</strong> #表示创建数据库成功。</p>
+<p>在这里给大家补充一点，创建数据库的时候，默认的字符是”latin“，也就是拉丁文，现在可能体会不到有什么区别，到数据表的操作的时候就有区别了。</p>
+<p>不过这里还是告诉大家，如何创建数据库的时候，自己定义为什么字符</p>
+<p><strong>create database XX(数据库名) charset = (字符编码，例如utf8);</strong></p>
+<p>#我们平时学的中文的字符编码是“utf-8”，但是在MySQL里面，中文字符编码是“utf8”，这点需要注意。</p>
+<p>还有一点，要是你创建一个已经存在的数据库会报错。例如：</p>
+<p><strong>create database test;</strong></p>
+<p>会提示以下信息</p>
+<p><strong>can’t create database ‘test’ ;database exists</strong></p>
+<p>所以我们在创建数据库的时候最好判断一下子，你要创建的数据库到底存不存在。</p>
+<p><strong>create database if not exists XX(数据库名);</strong> #尝试创一个test的数据库试试</p>
+<p>会出现<strong>Query ok,1 row affected ,1 warning.</strong></p>
+<p>显示“OK”，没有报错了，但是有一个警告，这个警告就是告诉用户，”test“这个数据库存在。</p>
+<p>现在让我们尝试一下创建一个关键字的数据库，</p>
+<p><strong>create database create;</strong></p>
+<p>会出现<strong>You have an error in your SQL syntax;check the manual that correspands to your ……………….to use near ‘create’ at line 1</strong> 这里我们可以确实看到的是，名为“create”的这个数据库没有创建成功，报错了.</p>
+<p>那如果有的人说我就想创建一个名为“create”的数据库，下面给出解决办法</p>
+<p>**create database <code>XX</code>(数据库名);(**注意，这里``是反引号，在键盘tab上面,1的旁边)</p>
+<p>这样操作就可以创建一个名叫做create的数据库了，但是最好不要起这些关键字名字，不好区别。</p>
+<h5 id="4-显示数据库信息"><a href="#4-显示数据库信息" class="headerlink" title="4.显示数据库信息"></a>4.显示数据库信息</h5><p><strong>show create database XX(数据库名);</strong></p>
+<p>查看信息。CHARACTER SET</p>
+<p>当然在这里你可以修改你的字符编码。使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">alter database dbname CHARACTER SET utf8 COLLATE utf8_general_ci;</span><br><span class="line">utf8_general_ci这是一个校对规则。</span><br><span class="line"></span><br><span class="line">然后在使用哪个查看数据库就可以看到，你的数据库的编码就变成了utf8;</span><br></pre></td></tr></table></figure>
+<h5 id="5-删除数据库"><a href="#5-删除数据库" class="headerlink" title="5.删除数据库"></a>5.删除数据库</h5><p><strong>drop database XX(数据库名);</strong></p>
+<p>删除了会显示</p>
+<p><strong>Query ok, 0 rows affected</strong> #这样就显示删除成功了。</p>
+<p>但是如果我们要删除一个并不存在的数据库会出现什么呢</p>
+<p>删除一个不存在的q数据库。回车显示</p>
+<p><strong>can’t drop database ‘q’; database doesno’t exist</strong></p>
+<p>很明显，报错了，因为不存在“a”这个数据库，我们可以判断一下，这个数据库存在才删除，下面给出代码。跟创建一样的</p>
+<p><strong>drop database if exists XX (数据库名字);</strong></p>
+<p>会显示</p>
+<p>Query OK, 0 rows affected, 1 warning (0.01 sec)</p>
+<p>和之前创建一样，虽然是成功的，但是有警告。警告的意思大概是说，么有这个数据库，。。</p>
+<h5 id="6-选择数据库"><a href="#6-选择数据库" class="headerlink" title="6.选择数据库"></a>6.选择数据库</h5><p>这是数据库的最后一个基本操作，我们如果想要创建数据，必须要创建一个数据库，然后在数据库当中创建数据表，在数据表中进行操作，</p>
+<p>但是这么多数据库，计算机怎么知道我们选择的是哪个数据库呢？我们使用下列语句</p>
+<p><strong>use XX(数据库名);</strong></p>
+<p>回车后会显示</p>
+<p><strong>Database changed</strong></p>
+<p>这个就提示你已经进入到了这个XX数据库里面了。然后你就可以操作了。</p>
+<h3 id="数据表"><a href="#数据表" class="headerlink" title="数据表"></a>数据表</h3><p>数据表的基本操作全都是在选择了数据库的前提下,一定要在选择了数据库的前提下。</p>
+<h5 id="1-创建表"><a href="#1-创建表" class="headerlink" title="1.创建表"></a>1.创建表</h5><p><strong>create table XX(表名)(</strong><br><strong>字段1名 数据类型，</strong><br><strong>字段2名 数据类型,</strong><br><strong>…….</strong><br><strong>字段n名 数据类型</strong><br><strong>);</strong></p>
+<p>这个创建表可以打个比方，如果要你用Excel做一份班级成绩表，你会怎么做？肯定先有个标题吧，比方说“18级网络二班期末成绩表”，这里的标题就相当于我们的表名。标题有了，我们得在第一行写上“学号”、“姓名”、“总成绩”吧，来告诉看这个表的人，每一列代表的什么东西，这里的“学号”、“姓名”、“总成绩”就相当于我们的字段名。到这里，都这应该对这段代码有所了解了，下面我们创建一个数据表。</p>
+<p><strong>My</strong>SQL [qq1]&gt; create table stu(<br><strong>-&gt; id varchar(20),</strong><br><strong>-&gt; name varchar(10),</strong><br><strong>-&gt; score int</strong><br>-&gt; );</p>
+<p>回车之后显示</p>
+<p><strong>Query OK, 0 rows affected (0.09 sec)</strong></p>
+<p>表示已经成功创建一个表了。这里注意写一行别忘记 , 和最后的 ；不然出错了又要重新敲一次。</p>
+<p>这里讲一讲mysql数据类型的知识。</p>
+<p>数据类型：int 整型<br>tinyint 整型（0-256）<br>decimal 浮点型（总位数，小数位数） 例如 decimal(3,1)<br>char(X) 定长字符型 例如 char(10)<br>varchar(X) 可变长度字符型 例如varchar（10）<br>text 大段文本</p>
+<p> binary 二进制（存储照片等）</p>
+<p>和C语言类似。</p>
+<p>字段属性：</p>
+<p>null:空<br>not null:不为空<br>default ‘XXXX’：默认值<br>auto_increment：自动增长<br>primary key：主键(主键的特点，不为空，不重复,一个表只能有一个主键，但是一个主键可以由多个列组成)</p>
+<p>具体的没必要多说，只要了解常用的数据类型即可。现在我可以讲讲“Latin”和“utf8”的区别了，如果是在“Latin”字符下创建的数据表，那么一个中文等于两个字符，也就相当于，如果名字是四个字，就要char（8）。但如果是在“utf8”字符下创建的数据表，一个中文等于一个字符，如果名字是四个字，只需要char（4）就够了。</p>
+<p>还有如果你还是要用关键字创建字段名或者表名的话，和之前一样要用``</p>
+<h5 id="2-查看表"><a href="#2-查看表" class="headerlink" title="2.查看表"></a>2.查看表</h5><p><strong>show tables;</strong></p>
+<p>一定要是tables，因为一个MySQL里面有多个数据库，所以，一个数据库里面也可以有多个表，当然，一个表里面也可以有多个数据，但是只有一个表的话，也要使用tables，也可以使用后面的显示创建的表。</p>
+<p>回车之后会显示你刚刚创建的表</p>
+<p>+—————+<br>| Tables_in_qq1 |<br>+—————+<br>| stu |<br>+—————+<br>1 row in set (0.00 sec)</p>
+<h5 id="3-显示创建表"><a href="#3-显示创建表" class="headerlink" title="3.显示创建表"></a>3.显示创建表</h5><p><strong>show create table XX(表名);</strong><br><strong>show create table XX(表名) \G;</strong></p>
+<p>上面两段代码都是显示创建表，只不过显示的样式不同，随意选择一种即可</p>
+<p>上面那种会显示</p>
+<p>+——-+————————————————————————————————————————————————————-+</p>
+<table>
+<thead>
+<tr>
+<th align="left">Table</th>
+<th align="left">Create Table</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">+——-+————————————————————————————————————————————————————–+</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">stu</td>
+<td align="left">CREATE TABLE <code>stu</code> (</td>
+</tr>
+<tr>
+<td align="left"><code>id</code> varchar(20) DEFAULT NULL,</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>name</code> varchar(10) DEFAULT NULL,</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>score</code> int(11) DEFAULT NULL</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">) ENGINE=InnoDB DEFAULT CHARSET=utf8</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">+——-+————————————————————————————————————————————————————–+</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">1 row in set (0.00 sec)</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p>下面那种会显示</p>
+<p><strong><em>*</em>*****************\</strong>*** 1. row <strong><em>*</em>*****************\</strong>***<br>Table: stu<br>Create Table: CREATE TABLE <code>stu</code> (<br><code>id</code> varchar(20) DEFAULT NULL,<br><code>name</code> varchar(10) DEFAULT NULL,<br><code>score</code> int(11) DEFAULT NULL<br>) ENGINE=InnoDB DEFAULT CHARSET=utf8<br>1 row in set (0.00 sec)</p>
+<p><strong>ERROR:</strong><br><strong>No query specified</strong></p>
+<p>##记得百度ERROR；</p>
+<h5 id="4-显示表的结构"><a href="#4-显示表的结构" class="headerlink" title="4.显示表的结构"></a>4.显示表的结构</h5><p><strong>describe(或desc) XX(表名);</strong></p>
+<p>回车之后会显示刚刚我创建的表的结构</p>
+<p>+——-+————-+——+—–+———+——-+<br>| Field | Type | Null | Key | Default | Extra |<br>+——-+————-+——+—–+———+——-+<br>| id | varchar(20) | YES | | NULL | |<br>| name | varchar(10) | YES | | NULL | |<br>| score | int(11) | YES | | NULL | |<br>+——-+————-+——+—–+———+——-+<br>3 rows in set (0.00 sec)</p>
+<p>解释每个表头的含义</p>
+<p>其中 id ,name,score都是字段，然后varchar什么的都是字段的内型。</p>
+<p>因为现在什么都没有写进去，所以是空的。key是说是不是主键。</p>
+<h5 id="5-删除表"><a href="#5-删除表" class="headerlink" title="5.删除表"></a>5.删除表</h5><p><strong>drop table XX(表名);</strong><br>*<em>drop table XX,XX,XX……;</em></p>
+<p>在这里因为后面还要用到表，我们只创建了一个表，所以我们再创建一个表，</p>
+<p><strong>My</strong>SQL [qq1]&gt; create table stu1(<br><strong>-&gt; id varchar(20),</strong><br><strong>-&gt; name varchar(10),</strong><br><strong>-&gt; score int</strong><br>-&gt; );</p>
+<p>来演示删除</p>
+<p>创建好了之后查看一下表的多少（show tables;）。</p>
+<p>回车之后显示</p>
+<p><strong>Query OK, 0 rows affected (0.04 sec)</strong> #表示删除成功。</p>
+<p>我们再来查看一下表。发现少了一个，表示删除成功。</p>
+<h3 id="数据的基本操作"><a href="#数据的基本操作" class="headerlink" title="数据的基本操作"></a>数据的基本操作</h3><p>数据的操作算是整个MySQL中最复杂的部分，虽然概括起来无非就是“增删查改”，但每一项底下包含的内容非常之多，我比较菜，所以尽力而为。</p>
+<h4 id="1-插入数据"><a href="#1-插入数据" class="headerlink" title="1.插入数据"></a>1.插入数据</h4><p>这个要在表的底下实现，<strong>所以要先有个表</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">insert into XX（表名） (字段1,字段2,字段3......) values (值1,值2,值3.......);</span><br></pre></td></tr></table></figure>
+<p>比如在自己的stu表中插入一些信息</p>
+<p><strong>insert into stu (id,name,score) values(“201801”,”某某”,90);</strong></p>
+<p>千万要注意不要写入中文符号，不然会报错，千万千万。</p>
+<p>回车之后有下面一段代码，显示成功插入数据</p>
+<p><strong>Query OK, 1 row affected (0.00 sec)</strong></p>
+<p>我们再插入几条信息</p>
+<p><strong>insert into stu (id,name,score) values(“201820”,”嘿嘿”,70);</strong></p>
+<p>insert into stu (id,name,score) values(“201830”,”lala”,90);</p>
+<p>然后看下面的查询数据</p>
+<h4 id="2-查询数据"><a href="#2-查询数据" class="headerlink" title="2.查询数据"></a>2.查询数据</h4><p>让大家看一下插入数据之后，表内变成什么样了，</p>
+<p>首先给大家介绍一个知识点——运算符<br>比较运算符 &gt;、&gt;=、&lt;、&lt;=、=（比较和赋值都是”=”）、&lt;&gt;（不等于）</p>
+<p>逻辑运算符 非（not） and（与）or（或）</p>
+<p>和C语言差不多，但是有的有区别，不要混淆。</p>
+<h6 id="1、查询一个表里面的数据"><a href="#1、查询一个表里面的数据" class="headerlink" title="1、查询一个表里面的数据"></a>1、查询一个表里面的数据</h6><p><strong>select * from XX（表名）;</strong></p>
+<p>我们 来查询刚刚创建的表的数据</p>
+<p><strong>select * from stu;</strong></p>
+<p>回车显示内容</p>
+<p>+——–+——–+——-+<br>| id | name | score |<br>+——–+——–+——-+<br>| 201801 | 某某 | 90 |<br>| 201810 | 啥啥 | 80 |<br>| 201810 | 啥啥 | 80 |<br>| 201820 | 嘿嘿 | 70 |<br>+——–+——–+——-+<br>4 rows in set (0.00 sec)</p>
+<h6 id="2、查询一个表里面某字段-的所有数据"><a href="#2、查询一个表里面某字段-的所有数据" class="headerlink" title="2、查询一个表里面某字段 的所有数据"></a>2、查询一个表里面某字段 的所有数据</h6><p>select 字段1,字段2,字段3……（或用”*”代替所有字段） from XX（表名）;</p>
+<p>举个例子，我们查询“id”字段底下所有的数据，那么”id“下有哪些数据，就会展现出来</p>
+<p><strong>select id from stu;</strong></p>
+<p>回车显示这个表里面id字段下的所有的数据</p>
+<p>+——–+<br>| id |<br>+——–+<br>| 201801 |<br>| 201810 |<br>| 201810 |<br>| 201820 |<br>+——–+<br>4 rows in set (0.00 sec)</p>
+<h6 id="3-我们也可以根据条件来查询信息"><a href="#3-我们也可以根据条件来查询信息" class="headerlink" title="3.我们也可以根据条件来查询信息"></a>3.我们也可以根据条件来查询信息</h6><p><strong>select * from XX（表名）where 字段1 = 值1 and 字段2 = 值2 and ……;</strong></p>
+<p>例如我们来查询stu里面name是某某的并且score是90的人</p>
+<p><strong>select * from stu where score =90 and name=”某某”;</strong></p>
+<p>回车显示内容</p>
+<p>+——–+——–+——-+<br>| id | name | score |<br>+——–+——–+——-+<br>| 201801 | 某某 | 90 |<br>+——–+——–+——-+<br>1 row in set (0.02 sec)</p>
+<h6 id="4-我们也可以搜索"><a href="#4-我们也可以搜索" class="headerlink" title="4.我们也可以搜索"></a>4.我们也可以搜索</h6><p><strong>select * from stu where score &gt; 90 or score &lt; 60;</strong></p>
+<p>这个就是查找表中分数在90以上或者60以下的人</p>
+<p>要是没有的话，就会显示这段信息。</p>
+<p><strong>Empty set (0.00 sec)</strong></p>
+<p>这个就是查找表中分数在80以上或者60以下的人</p>
+<p>+——–+——–+——-+<br>| id | name | score |<br>+——–+——–+——-+<br>| 201801 | 某某 | 90 |<br>+——–+——–+——-+<br>1 row in set (0.00 sec)</p>
+<h6 id="5-对数据进行排序"><a href="#5-对数据进行排序" class="headerlink" title="5.对数据进行排序"></a>5.对数据进行排序</h6><p><strong>select * from XX（表名） order by 字段x asc;（默认就是升序，低————高）</strong></p>
+<p>这里演示一个按照id序号来排序。</p>
+<p><strong>select * from stu order by id asc;</strong></p>
+<p>回车之后显示</p>
+<p>+——–+——–+——-+<br>| id | name | score |<br>+——–+——–+——-+<br>| 201801 | 某某 | 90 |<br>| 201810 | 啥啥 | 80 |<br>| 201810 | 啥啥 | 80 |<br>| 201820 | 嘿嘿 | 70 |<br>+——–+——–+——-+</p>
+<p><strong>select * from XX（表名） order by 字段x desc;</strong> （高———低）</p>
+<p><strong>select * from XX（表名） where 字段x = 值x oreder by 字段x asc(desc);</strong> （按照某种条件排序）</p>
+<p><strong>select * from XX（表名） limit n;</strong> （取前n条数据）</p>
+<p>下面演示一个取前两条数据</p>
+<p><strong>select * from stu limit 2;</strong></p>
+<p>回车之后显示</p>
+<p>+——–+——–+——-+<br>| id | name | score |<br>+——–+——–+——-+<br>| 201801 | 某某 | 90 |<br>| 201810 | 啥啥 | 80 |<br>+——–+——–+——-+<br>2 rows in set (0.00 sec)</p>
+<p>其他的就不举例了。自己可以试一试。</p>
+<p><strong>select * from XX（表名） limit n,m;</strong> （从第n条开始取m条数据 ）</p>
+<p>*<em>select \</em> from XX（表名） order by 字段x asc(desc) limit n;**（取某种排序下的前n条数据）</p>
+<h4 id="3-删除数据"><a href="#3-删除数据" class="headerlink" title="3.删除数据"></a>3.删除数据</h4><p><strong>delete from XX（表名） where 字段x = 值x;</strong></p>
+<p>举例说明</p>
+<p><strong>delete from stu where id=201801;</strong></p>
+<p>回车之后，在查询表中的数据，看是不是少了第一条信息，</p>
+<p><strong>select * from stu;</strong></p>
+<p>回车之后发现少了哪一行id=201801的数据。这样就删除数据成功了。</p>
+<p>然后在使用select * from stu;</p>
+<p>来看看自己是否真的删除成功了，</p>
+<p>+——–+——–+——-+<br>| id | name | score |<br>+——–+——–+——-+<br>| 201810 | 啥啥 | 80 |<br>| 201810 | 啥啥 | 80 |<br>| 201820 | 嘿嘿 | 70 |<br>+——–+——–+——-+<br>3 rows in set (0.01 sec)</p>
+<h4 id="4-修改数据"><a href="#4-修改数据" class="headerlink" title="4.修改数据"></a>4.修改数据</h4><p><strong>update XX（表名） set 字段1 = 值1,字段2 = 值2 where 条件;</strong><br><strong>update XX（表名） set 字段1 = 值1;</strong></p>
+<p>下面一条的作用是修改某一字段的所有值，所以不需要加条件。</p>
+<p>实例</p>
+<p><strong>update stu set id = 201710,name = “啦啦” where id = 201810 ;</strong></p>
+<p>回车之后显示</p>
+<p><strong>Query OK, 2 rows affected (0.01 sec)</strong><br><strong>Rows matched: 2 Changed: 2 Warnings: 0</strong></p>
+<p>表示修改成功。</p>
+<p>然后我们再来查询一下表的信息。</p>
+<p><strong>select * from stu;</strong></p>
+<p>回车之后显示</p>
+<p><strong>+——–+——–+——-+</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>id</strong></th>
+<th align="left"><strong>name</strong></th>
+<th align="left"><strong>score</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><strong>+——–+——–+——-+</strong></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>201710</strong></th>
+<th align="left"><strong>啦啦</strong></th>
+<th align="left"><strong>80</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><strong>201710</strong></td>
+<td align="left"><strong>啦啦</strong></td>
+<td align="left"><strong>80</strong></td>
+</tr>
+<tr>
+<td align="left">———-</td>
+<td align="left">——–</td>
+<td align="left">——</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><strong>201820</strong></td>
+<td align="left"><strong>嘿嘿</strong></td>
+<td align="left"><strong>70</strong></td>
+</tr>
+<tr>
+<td align="left">———-</td>
+<td align="left">——–</td>
+<td align="left">——</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><strong>+——–+——–+——-+</strong></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">3 rows in set (0.00 sec)</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p>注意这里的第一条信息，已经改变了。</p>
+<h4 id="然后我们就可以在phpstrom中尝试这些语句，看是不是一样的。"><a href="#然后我们就可以在phpstrom中尝试这些语句，看是不是一样的。" class="headerlink" title="然后我们就可以在phpstrom中尝试这些语句，看是不是一样的。"></a>然后我们就可以在phpstrom中尝试这些语句，看是不是一样的。</h4><h3 id="php部分"><a href="#php部分" class="headerlink" title="php部分"></a><strong>php部分</strong></h3><p><strong>入门</strong></p>
+<p>①PHP中的变量，声明与使用，必须使用$开头。</p>
+<p>②PHP是一种弱类型语言，变量其实并不需要声明，可以直接给变量赋任何类型的值；</p>
+<p>③PHP中可以使用连等同时声明多个变量。而不能使用逗号分隔。</p>
+<p>eg：$num1=$num2=$num3=5;</p>
+<p>④常用变量函数：</p>
+<p>unset()：删除并释放变量；</p>
+<p>isset()：检测变量是否设置；</p>
+<p>empty()：检测变量是否为空（未设置或值为Null都算空）；</p>
+<p>⑤变量的命名：只能有字母数字下划线组成，开头不能是数字。而且，PHP中变量区分大小写！！<br>$name,$Nnme,$NAME都是不同变量；</p>
+<p>但是，PHP的内置函数不区分大小写！echo EcHo都是有效的。</p>
+<h4 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h4><p>这里面有[不再使用mysql_connect()来连接数据库]的解释</p>
+<p>因为他 会显示 <strong>不推荐使用mysql扩展，将来会删除它</strong></p>
+<p>本扩展自 PHP 5.5.0 起已废弃，并在将来会被移除。应使用 <a target="_blank" rel="noopener" href="http://php.net/manual/zh/book.mysqli.php">MySQLi</a> 或 <a target="_blank" rel="noopener" href="http://php.net/manual/zh/ref.pdo-mysql.php">PDO_MySQL</a> 扩展来替换之。参见 <a target="_blank" rel="noopener" href="http://php.net/manual/zh/mysqlinfo.api.choosing.php">MySQL：选择 API</a> 指南以及<a target="_blank" rel="noopener" href="http://php.net/manual/zh/faq.databases.php#faq.databases.mysql.deprecated">相关 FAQ</a> 以获取更多信息</p>
+<p>详情请了解下面。</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/wangtao_20/p/4823088.html">https://www.cnblogs.com/wangtao_20/p/4823088.html</a></p>
+<p>连接解释：</p>
+<p>mysqli_connect_errno() 返回一个整数，标识连接数据库是否成功和各种错误的数值。</p>
+<p>mysqli_connect_error() 返回连接错误信息。</p>
+<p>以下是一些连接情况：</p>
+<p><strong>mysqli_connect_errno</strong> <strong>mysqli_connect_error</strong></p>
+<p>2002 php_network_getaddresses: getaddrinfo failed: 不知道这样的主机。</p>
+<p>1045 Access denied for user ‘wjj’@’localhost’ (using password: YES)</p>
+<p>1049 Unknown database ‘test’</p>
+<p>0(连接成功) null</p>
+<h5 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h5><p>语句：**$sql=’CREATE DATABASE aa ‘;**<br>create database大小写都可以，</p>
+<p><strong>PHP 使用 mysqli_query 函数来创建或者删除 MySQL 数据库。</strong><br><strong>该函数有两个参数，在执行成功时返回 TRUE，否则返回 FALSE。</strong></p>
+<h5 id="删除数据库"><a href="#删除数据库" class="headerlink" title="删除数据库"></a>删除数据库</h5><p>语句：**$sql=’DROP DATABASE aa ‘;**</p>
+<p>在使用PHP脚本删除数据库时，不会出现确认是否删除信息，会直接删除指定数据库，所以你在删除数据库时要特别小心。千万小心。</p>
+<h5 id="选择数据库"><a href="#选择数据库" class="headerlink" title="选择数据库"></a>选择数据库</h5><p>语句：<strong>mysqli_select_db($conn,’aa’);</strong><br>aa是指你选择的数据库名字，这个操作简单，不演示了。</p>
+<h5 id="创建数据表"><a href="#创建数据表" class="headerlink" title="创建数据表"></a>创建数据表</h5><p>语句：</p>
+<p><strong>$s</strong>ql=”CREATE TABLE bb_1(“.**<br><strong>“bb_id INT NOT NULL AUTO_INCREMENT,”.</strong><br><strong>“bb_title VARCHAR(100) NOT NULL,”.</strong><br><strong>“bb_name VARCHAR(40) NOT NULL,”.</strong><br><strong>“bb_data DATE, “.</strong><br>“PRIMARY KEY(bb_id))ENGINE=InnoDB DEFAULT CHARSET=utf8;”;**</p>
+<p>一定要看清楚括号和, .;不要少一个多一个，</p>
+<p>PRIMARY KEY(bb_id)主键是Id</p>
+<p>AUTO_INCREMENT的意思是自己增加，id自己增加，这样方便一点。</p>
+<p>ENGINE=InnoDB 表示将数据库的引擎设置为InnoDB,从MySQL 5.6开始默认使用该引擎。</p>
+<p>DEFAULT CHARSET=utf8 表示设置数据库的默认字符集为utf8</p>
+<h5 id="删除数据表"><a href="#删除数据表" class="headerlink" title="删除数据表"></a>删除数据表</h5><p><strong>语句：$sql=”DROP TABLE bb_1”;</strong></p>
+<p> <strong>mysqli_select_db($conn,’aa’);</strong></p>
+<p>一定不要忘记写这一句mysqli_select_db($conn,’aa’);</p>
+<p>这一句的意思是说在这个aa数据库里面删除bb_1的数据表。</p>
+<h5 id="在数据表里面插入数据"><a href="#在数据表里面插入数据" class="headerlink" title="在数据表里面插入数据"></a>在数据表里面插入数据</h5><p>语句：</p>
+<p><strong>$sql=”INSERT INTO bb_1”.</strong></p>
+<p> <strong>“(bb_title,bb_name,bb_data)”.</strong><br><strong>​<br>​ “VALUES”.</strong><br><strong>​<br>​ “(‘$bb_title’,’$bb_name’,’$bb_data’)”;</strong><br>​<br>​ 可以多插入几条数据，一样的形式，修改数据就好了。<br>​<br>​ 然后就可以在你的数据库里面看到这些数据了。<br>​<br>​<br>​<br>​</p>
+<h5 id="查询数据1-1"><a href="#查询数据1-1" class="headerlink" title="查询数据1.1"></a>查询数据1.1</h5><p>语句： <strong>$sql=’SELECT bb_id,bb_title,bb_name,bb_data FROM bb_1’;</strong></p>
+<p>bb_id,bb_title,bb_name,bb_data都是字段</p>
+<p>bb_1是数据表名。</p>
+<p>一定要注意括号一对一对的写，不要忘记html代码的连续性。</p>
+<p>在上面的例子中，PHP mysqli_fetch_array() 函数第二个参数为 <strong>MYSQLI_ASSOC</strong>，<br>设置该参数查询结果返回<strong>关联数组</strong></p>
+<p>PHP 提供了另外一个函数 <strong>mysqli_fetch_assoc()</strong>, 该函数从结果集中取得一行作为关联数组。<br>返回根据从结果集取得的行生成的关联数组，如果没有更多行，则返回 false。</p>
+<p>在我们执行完 SELECT 语句后，释放游标内存是一个很好的习惯。</p>
+<p>可以通过 PHP 函数 mysqli_free_result() 来实现内存的释放。</p>
+<p>游标内存：存储Select的查询结果，并用来遍历。</p>
+<h5 id="查询数据1-2"><a href="#查询数据1-2" class="headerlink" title="查询数据1.2"></a>查询数据1.2</h5><p>语句：**$sql=’SELECT bb_id,bb_title,bb_name,bb_data FROM bb_1 WHERE bb_id=”2”‘;**</p>
+<p>WHERE相当于一个限制条件。比如这里面的只能是id 为2的数据被查出来。</p>
+<h5 id="查询数据1-3"><a href="#查询数据1-3" class="headerlink" title="查询数据1.3"></a>查询数据1.3</h5><p>模糊查询</p>
+<p>LIKE的使用。</p>
+<p>语句：</p>
+<p><strong>$sql=’SELECT bb_id,bb_title,bb_name,bb_data FROM bb_1</strong><br><strong>WHERE bb_name LIKE “%学习”‘;</strong></p>
+<p>还有一些用法</p>
+<p>‘%a’ //以a结尾的数据</p>
+<p>‘a%’ //以a开头的数据</p>
+<p>‘%a%’ //含有a的数据</p>
+<p>‘<em>a</em>‘ //三位且中间字母是a的</p>
+<p>‘<em>_a’ //两位且结尾字母是a的</em></p>
+<p>‘a_’ //两位且开头字母是a的</p>
+<h5 id="查询数据1-3-1"><a href="#查询数据1-3-1" class="headerlink" title="查询数据1.3"></a>查询数据1.3</h5><p>语句：</p>
+<p><strong>$sql=’SELECT bb_id,bb_title,bb_name,bb_data</strong><br><strong>FROM bb_1</strong><br><strong>ORDER BY bb_data ASC’;</strong></p>
+<p>按照时间的顺序排序。输出。</p>
+<p>其他的和数据测试的一样。</p>
+<h5 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h5><p>语句：</p>
+<p><strong>$sql=’UPDATE bb_1</strong><br><strong>SET bb_name=”谁呀”</strong><br><strong>WHERE bb_id=2’;</strong></p>
+<p>WHERE是一个限制条件；</p>
+<p>可以这样理解：update 表名称 set 列名称 = 新值 where 更新条件;</p>
+<h5 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h5><p>语句：</p>
+<p><strong>$sql=’DELETE FROM bb_1</strong><br><strong>WHERE bb_id=3’;</strong></p>
+<p>delete，drop，truncate 都有删除表的作用，区别在于：</p>
+<ul>
+<li>1、delete 和 truncate 仅仅删除表数据，drop 连表数据和表结构一起删除，打个比</li>
+<li>方，delete 是单杀，truncate 是团灭，drop 是把电脑摔了。</li>
+<li>2、delete 是 DML 语句，操作完以后如果没有不想提交事务还可以回滚，truncate 和</li>
+<li>drop 是 DDL 语句，操作完马上生效，不能回滚，打个比方，delete 是发微信说分手，</li>
+<li>后悔还可以撤回，truncate 和 drop 是直接扇耳光说滚，不能反悔。</li>
+<li>3、执行的速度上，<strong>drop&gt;truncate&gt;delete</strong>，打个比方，drop 是神舟火箭，truncate</li>
+<li>是和谐号动车，delete 是自行车。</li>
+</ul>
+<p>好了，到此结束，感谢大家。</p>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37236745/article/details/78694768">https://blog.csdn.net/qq_37236745/article/details/78694768</a></p>
+<p>参考：菜鸟教程。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="D15h35 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.jpg" alt="D15h35 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Note/" rel="tag"><i class="fa fa-tag"></i> Note</a>
+              <a href="/tags/mysql/" rel="tag"><i class="fa fa-tag"></i> mysql</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/11/20/Note/Git%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/" rel="prev" title="Git基础教程">
+                  <i class="fa fa-chevron-left"></i> Git基础教程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/05/20/Note/%E8%A7%A3%E5%86%B3%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%8Ehyper-v%E5%86%B2%E7%AA%81/" rel="next" title="Mysql数据库">
+                  Mysql数据库 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">D15h35</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+  <script>
+    NProgress.configure({
+      showSpinner: true
+    });
+    NProgress.start();
+    document.addEventListener('readystatechange', () => {
+      if (document.readyState === 'interactive') {
+        NProgress.inc(0.8);
+      }
+      if (document.readyState === 'complete') {
+        NProgress.done();
+      }
+    });
+    document.addEventListener('pjax:send', () => {
+      NProgress.start();
+    });
+    document.addEventListener('pjax:success', () => {
+      NProgress.done();
+    });
+  </script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

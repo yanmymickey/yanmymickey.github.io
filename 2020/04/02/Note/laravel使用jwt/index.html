@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="YGm-O0FYtJIJd878GKblZACh8xSr46g0l4F5UDGhoTc">
+  <meta name="baidu-site-verification" content="code-tyOuGzoN3z">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css">
+  <script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yanmymickey.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="Laravel使用JWT前言laravel使用JWT有两种方法,一中是使用内置的Auth结合JWT定义的中间件进行认证,这种方法laravel社区有很多教程,这里不再细说，谈谈如何使用自定义JWT来完成用户认证">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Laravel使用JWT">
+<meta property="og:url" content="https://yanmymickey.github.io/2020/04/02/Note/laravel%E4%BD%BF%E7%94%A8jwt/index.html">
+<meta property="og:site_name" content="菜鸡的BLOG">
+<meta property="og:description" content="Laravel使用JWT前言laravel使用JWT有两种方法,一中是使用内置的Auth结合JWT定义的中间件进行认证,这种方法laravel社区有很多教程,这里不再细说，谈谈如何使用自定义JWT来完成用户认证">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200402/xwyk8GUazxXF.png?imageslim">
+<meta property="article:published_time" content="2020-04-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-01-16T06:07:28.041Z">
+<meta property="article:author" content="D15h35">
+<meta property="article:tag" content="Note">
+<meta property="article:tag" content="php">
+<meta property="article:tag" content="laravel">
+<meta property="article:tag" content="jwt">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blogjpg.yanmy.top/blog/20200402/xwyk8GUazxXF.png?imageslim">
+
+
+<link rel="canonical" href="https://yanmymickey.github.io/2020/04/02/Note/laravel%E4%BD%BF%E7%94%A8jwt/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>Laravel使用JWT | 菜鸡的BLOG</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XZVDBPC6X7"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XZVDBPC6X7');
+      }
+    </script>
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?633ffcf7a0f511eb45dead6c18798c6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="菜鸡的BLOG" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">菜鸡的BLOG</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">31</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">16</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">58</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Laravel%E4%BD%BF%E7%94%A8JWT"><span class="nav-number">1.</span> <span class="nav-text">Laravel使用JWT</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JWT-oath"><span class="nav-number">1.2.</span> <span class="nav-text">JWT-oath</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">1.2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%8A%A0%E5%AF%86%E5%AF%86%E5%8C%99"><span class="nav-number">1.2.2.</span> <span class="nav-text">生成加密密匙</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C%E4%B8%A4%E4%B8%AA-Facade"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">注册两个 Facade</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-auth-php"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">修改 auth.php</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="nav-number">1.2.3.</span> <span class="nav-text">处理流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.4.</span> <span class="nav-text">使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%9F%E6%88%90"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">生成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">验证</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%B4%E6%98%8E"><span class="nav-number">1.2.5.</span> <span class="nav-text">说明</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="D15h35"
+      src="/images/while.png">
+  <p class="site-author-name" itemprop="name">D15h35</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yanmymickey" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yanmymickey" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/yanmymickey" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://yanmymickey.github.io/2020/04/02/Note/laravel%E4%BD%BF%E7%94%A8jwt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/while.png">
+      <meta itemprop="name" content="D15h35">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="菜鸡的BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Laravel使用JWT
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-04-02 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-02T00:00:00+08:00">2020-04-02</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-01-16 14:07:28" itemprop="dateModified" datetime="2021-01-16T14:07:28+08:00">2021-01-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Note/" itemprop="url" rel="index"><span itemprop="name">Note</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Note/PHP/" itemprop="url" rel="index"><span itemprop="name">PHP</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Laravel使用JWT"><a href="#Laravel使用JWT" class="headerlink" title="Laravel使用JWT"></a>Laravel使用JWT</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>laravel使用JWT有两种方法,一中是使用内置的Auth结合JWT定义的中间件进行认证,这种方法laravel社区有很多教程,这里不再细说，谈谈如何使用自定义JWT来完成用户认证</p>
+<a id="more"></a>
+<h2 id="JWT-oath"><a href="#JWT-oath" class="headerlink" title="JWT-oath"></a>JWT-oath</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#使用composer安装jwt-oath扩展</span><br><span class="line">#当然也可以写进composer.json文件中</span><br><span class="line">composer require tymon&#x2F;jwt-auth</span><br></pre></td></tr></table></figure>
+<h3 id="生成加密密匙"><a href="#生成加密密匙" class="headerlink" title="生成加密密匙"></a>生成加密密匙</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 这条命令会在 .env 文件下生成一个加密密钥，如：JWT_SECRET&#x3D;foobar</span><br><span class="line">#注意.env文件默认是不会上传git的,为了你的同伴也可以正常使用认证,需要在.env.example中手动添加相同的字段</span><br><span class="line">php artisan jwt:secret</span><br></pre></td></tr></table></figure>
+<h4 id="注册两个-Facade"><a href="#注册两个-Facade" class="headerlink" title="注册两个 Facade"></a>注册两个 Facade</h4><p>这两个 Facade 并不是必须的，但是使用它们会给你的代码编写带来一点便利。</p>
+<p><strong>config/app.php</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#39;aliases&#39; &#x3D;&gt; [</span><br><span class="line">        ...</span><br><span class="line">        &#x2F;&#x2F; 添加以下两行</span><br><span class="line">        &#39;JWTAuth&#39; &#x3D;&gt; &#39;Tymon\JWTAuth\Facades\JWTAuth&#39;,</span><br><span class="line">        &#39;JWTFactory&#39; &#x3D;&gt; &#39;Tymon\JWTAuth\Facades\JWTFactory&#39;,</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+<h4 id="修改-auth-php"><a href="#修改-auth-php" class="headerlink" title="修改 auth.php"></a>修改 auth.php</h4><p><strong>config/auth.php</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#39;guards&#39; &#x3D;&gt; [</span><br><span class="line">    &#39;web&#39; &#x3D;&gt; [</span><br><span class="line">        &#39;driver&#39; &#x3D;&gt; &#39;session&#39;,</span><br><span class="line">        &#39;provider&#39; &#x3D;&gt; &#39;users&#39;,</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line">    &#39;api&#39; &#x3D;&gt; [</span><br><span class="line">        &#39;driver&#39; &#x3D;&gt; &#39;jwt&#39;,      &#x2F;&#x2F; 原来是 token 改成jwt</span><br><span class="line">        &#39;provider&#39; &#x3D;&gt; &#39;users&#39;,</span><br><span class="line">    ],</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+<h3 id="处理流程"><a href="#处理流程" class="headerlink" title="处理流程"></a>处理流程</h3><p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200402/xwyk8GUazxXF.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200402/xwyk8GUazxXF.png?imageslim" alt="mark"></a></p>
+<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><h4 id="生成"><a href="#生成" class="headerlink" title="生成"></a>生成</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">&#x2F;&#x2F;自定义的载荷填充</span><br><span class="line">$customClaims &#x3D; [</span><br><span class="line">            &#39;iss&#39; &#x3D;&gt; &quot;http:&#x2F;&#x2F;market.sky31.com&quot;,</span><br><span class="line">            &#39;share&#39; &#x3D;&gt; md5($stu_id),</span><br><span class="line">        ];</span><br><span class="line">&#x2F;&#x2F;利用JWT工厂类生成根据自定义的载荷生成payload</span><br><span class="line">$payload &#x3D; \JWTFactory::customClaims($customClaims)-&gt;make();</span><br><span class="line">&#x2F;&#x2F;调用Auth类的encode方法就可以生成token</span><br><span class="line">$token &#x3D; \JWTAuth::encode($payload);</span><br><span class="line">&#x2F;&#x2F;注意,此处的token是一个类,如何直接添加进response()-&gt;json()中将会报错,所以强制转换为String便可以当成字符床正常使用了</span><br><span class="line">return (string)$token;</span><br></pre></td></tr></table></figure>
+<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">&#x2F;&#x2F;认证可以写在中间件中</span><br><span class="line">&#x2F;&#x2F;首部use添加JWT的所有异常类</span><br><span class="line">use Tymon\JWTAuth\Exceptions\JWTException;</span><br><span class="line">use Tymon\JWTAuth\Exceptions\TokenExpiredException;</span><br><span class="line">use Tymon\JWTAuth\Exceptions\TokenInvalidException;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;一定要使用try catch版快来验证token,token的验证失败,过期等等异常都是throw一个异常,不捕获异常程序直接死掉了,且错误信息不可以定义,就会导致代码不严谨</span><br><span class="line">try &#123;</span><br><span class="line"> 	&#x2F;&#x2F;定义一个Auth类来验证token,首先将传过来的token绑定在类中</span><br><span class="line">    $token &#x3D; \JWTAuth::setToken($data[&#39;token&#39;]);</span><br><span class="line">    &#x2F;&#x2F;调用以下方法可以获取token中载荷的数据来使用</span><br><span class="line">    $user_id&#x3D;$token-&gt;payload()-&gt;get()[&#39;user_id&#39;];</span><br><span class="line">    &#x2F;&#x2F;验证token,正确就会取出其中的载荷返回一个只含有载荷的对象,</span><br><span class="line">    &#x2F;&#x2F;失败就会抛出异常,失败的原因有许多,过期,数据格式不对,整个JWT过期</span><br><span class="line">    $token-&gt;checkOrFail();</span><br><span class="line">    &#x2F;&#x2F;还有一个$token()-&gt;check方法可以验证token,返回值为bool,验证失败不会抛出异常而是返回false</span><br><span class="line">    &#x2F;&#x2F;捕获过期异常然后去刷新过期时间</span><br><span class="line">&#125; catch (TokenExpiredException $e) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        &#x2F;&#x2F;刷新token,返回值是更新过期时间的新token</span><br><span class="line">        $new_token&#x3D;$token-&gt;refresh();</span><br><span class="line">        &#x2F;&#x2F;更新数据库中的token</span><br><span class="line">        $user&#x3D; User::query()-&gt;where(&#39;user_id&#39;,$user_id)-&gt;first();</span><br><span class="line">        $user-&gt;token&#x3D;$new_token;</span><br><span class="line">        $user-&gt;save();</span><br><span class="line">        &#x2F;&#x2F;将新token设置在request的参数中传给下一个路由</span><br><span class="line">        $request-&gt;request-&gt;set(&quot;token&quot;,$new_token);</span><br><span class="line">        &#x2F;&#x2F;如果刷新不了,也过期了就返回错误码让用户重新登录</span><br><span class="line">    &#125;catch (TokenExpiredException $e)&#123;</span><br><span class="line">        &#x2F;&#x2F;msg是我自定义的用来返回json的,不用管</span><br><span class="line">        return msg(3,__LINE__);</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;token格式错误</span><br><span class="line">&#125; catch (TokenInvalidException $e) &#123;</span><br><span class="line">    return msg(403,$e-&gt;getMessage());</span><br><span class="line">&#125;catch (JWTException $e) &#123;</span><br><span class="line">    return msg(403,$e-&gt;getMessage());</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;将request传给下下一个路由,到这里认证便成功了</span><br><span class="line">return $next($request);</span><br></pre></td></tr></table></figure>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>JWT-oath扩展会在config目录下生成一个jwt.php,里面定义了JWT的相关配置</p>
+<p>**注意:**这个扩展有两种过期方式,一种的token有效期,时间短,过期了需要刷新,一种是刷新有效期,时间长,只要在有效期内拿不在黑名单的旧token来刷新就可以,时间一长一短可以一定程度上防止token盗用</p>
+<p>常用配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;jwt有效期,默认是60分钟,单位是分钟</span><br><span class="line">JWT_TTL </span><br><span class="line">&#x2F;&#x2F;jwt的刷新有效期,单位是分钟,默认是20160(14天)</span><br><span class="line">JWT_REFRESH_TTL</span><br><span class="line">&#x2F;&#x2F;注意以上两个时间不可以用60*24这种格式,需要设置为120这样的整数</span><br><span class="line">&#x2F;&#x2F;必须填充的载荷,在你自己设定载荷的时候必须全部手动填充,不然会报错,无法生成,不想自定义的可以注释掉</span><br><span class="line">    &#39;required_claims&#39; &#x3D;&gt; [</span><br><span class="line">        &#39;iss&#39;,</span><br><span class="line">&#x2F;&#x2F;        &#39;iat&#39;,</span><br><span class="line">&#x2F;&#x2F;        &#39;exp&#39;,</span><br><span class="line">&#x2F;&#x2F;        &#39;nbf&#39;,</span><br><span class="line">&#x2F;&#x2F;        &#39;sub&#39;,</span><br><span class="line">&#x2F;&#x2F;        &#39;jti&#39;,</span><br><span class="line">    ], </span><br><span class="line">&#x2F;&#x2F;iss默认是使用用于请求的api路径</span><br><span class="line">&#x2F;&#x2F;设置黑名单,当为false时,刷新后生成新token,旧token仍然可以用</span><br><span class="line">&#x2F;&#x2F;true验证时就会抛出黑名单异常信息</span><br><span class="line">blacklist_enabled</span><br></pre></td></tr></table></figure>
+<p>建议是修改.env中的环境变量,不要修改jwt.php文件,因为jwt.php文件中的配置项大都是从.env中获取的,没有获取到会用默认值</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="D15h35 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.jpg" alt="D15h35 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Note/" rel="tag"><i class="fa fa-tag"></i> Note</a>
+              <a href="/tags/php/" rel="tag"><i class="fa fa-tag"></i> php</a>
+              <a href="/tags/laravel/" rel="tag"><i class="fa fa-tag"></i> laravel</a>
+              <a href="/tags/jwt/" rel="tag"><i class="fa fa-tag"></i> jwt</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/03/29/CTF_WP/ctfshow_%E5%86%85%E9%83%A8%E8%B5%9B/" rel="prev" title="CTFshow内部赛_WP">
+                  <i class="fa fa-chevron-left"></i> CTFshow内部赛_WP
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/04/08/CTF_WP/PyCalX%201%E5%92%8C2/" rel="next" title="PyCalX 1和2">
+                  PyCalX 1和2 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">D15h35</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+  <script>
+    NProgress.configure({
+      showSpinner: true
+    });
+    NProgress.start();
+    document.addEventListener('readystatechange', () => {
+      if (document.readyState === 'interactive') {
+        NProgress.inc(0.8);
+      }
+      if (document.readyState === 'complete') {
+        NProgress.done();
+      }
+    });
+    document.addEventListener('pjax:send', () => {
+      NProgress.start();
+    });
+    document.addEventListener('pjax:success', () => {
+      NProgress.done();
+    });
+  </script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

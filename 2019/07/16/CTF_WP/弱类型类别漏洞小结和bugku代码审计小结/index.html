@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="YGm-O0FYtJIJd878GKblZACh8xSr46g0l4F5UDGhoTc">
+  <meta name="baidu-site-verification" content="code-tyOuGzoN3z">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css">
+  <script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yanmymickey.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="bugku代码审计写在前面一下只是个人的一点拙见，请大佬轻喷，欢迎大佬补充，很多不恰当的地方。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bugku代码审计">
+<meta property="og:url" content="https://yanmymickey.github.io/2019/07/16/CTF_WP/%E5%BC%B1%E7%B1%BB%E5%9E%8B%E7%B1%BB%E5%88%AB%E6%BC%8F%E6%B4%9E%E5%B0%8F%E7%BB%93%E5%92%8Cbugku%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%B0%8F%E7%BB%93/index.html">
+<meta property="og:site_name" content="菜鸡的BLOG">
+<meta property="og:description" content="bugku代码审计写在前面一下只是个人的一点拙见，请大佬轻喷，欢迎大佬补充，很多不恰当的地方。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-07-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-01-16T01:32:42.884Z">
+<meta property="article:author" content="D15h35">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="php弱类型">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://yanmymickey.github.io/2019/07/16/CTF_WP/%E5%BC%B1%E7%B1%BB%E5%9E%8B%E7%B1%BB%E5%88%AB%E6%BC%8F%E6%B4%9E%E5%B0%8F%E7%BB%93%E5%92%8Cbugku%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%B0%8F%E7%BB%93/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>bugku代码审计 | 菜鸡的BLOG</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XZVDBPC6X7"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XZVDBPC6X7');
+      }
+    </script>
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?633ffcf7a0f511eb45dead6c18798c6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="菜鸡的BLOG" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">菜鸡的BLOG</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">31</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">16</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">58</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#bugku%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1"><span class="nav-number">1.</span> <span class="nav-text">bugku代码审计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="nav-number">1.1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-extract%E5%8F%98%E9%87%8F%E8%A6%86%E7%9B%96"><span class="nav-number">1.2.</span> <span class="nav-text">0x00 extract变量覆盖</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%9C%B0%E5%9D%80"><span class="nav-number">1.2.1.</span> <span class="nav-text">题目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%BA%90%E7%A0%81"><span class="nav-number">1.2.2.</span> <span class="nav-text">题目源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writeip"><span class="nav-number">1.2.3.</span> <span class="nav-text">writeip</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flag"><span class="nav-number">1.2.4.</span> <span class="nav-text">flag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#extract%E7%94%A8%E6%B3%95"><span class="nav-number">1.2.5.</span> <span class="nav-text">extract用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%B4%E6%98%8E"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0"><span class="nav-number">1.2.5.2.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="nav-number">1.2.5.3.</span> <span class="nav-text">返回值</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01strcmp%E6%AF%94%E8%BE%83%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.3.</span> <span class="nav-text">0x01strcmp比较字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%9C%B0%E5%9D%80-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">题目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%BA%90%E7%A0%81-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">题目源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writeup"><span class="nav-number">1.3.3.</span> <span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flag-1"><span class="nav-number">1.3.4.</span> <span class="nav-text">flag</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02urldecode%E4%BA%8C%E6%AC%A1%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87"><span class="nav-number">1.4.</span> <span class="nav-text">0x02urldecode二次编码绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%9C%B0%E5%9D%80-2"><span class="nav-number">1.4.1.</span> <span class="nav-text">题目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%BA%90%E7%A0%81-2"><span class="nav-number">1.4.2.</span> <span class="nav-text">题目源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writeup-1"><span class="nav-number">1.4.3.</span> <span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flag-2"><span class="nav-number">1.4.4.</span> <span class="nav-text">flag</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03md5-%E5%87%BD%E6%95%B0"><span class="nav-number">1.5.</span> <span class="nav-text">0x03md5()函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%9C%B0%E5%9D%80-3"><span class="nav-number">1.5.1.</span> <span class="nav-text">题目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%BA%90%E7%A0%81-3"><span class="nav-number">1.5.2.</span> <span class="nav-text">题目源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writeup-2"><span class="nav-number">1.5.3.</span> <span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flag-3"><span class="nav-number">1.5.4.</span> <span class="nav-text">flag</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04md5%E5%8A%A0%E5%AF%86%E7%9B%B8%E7%AD%89%E7%BB%95%E8%BF%87"><span class="nav-number">1.6.</span> <span class="nav-text">0x04md5加密相等绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%9C%B0%E5%9D%80-4"><span class="nav-number">1.6.1.</span> <span class="nav-text">题目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%BA%90%E7%A0%81-4"><span class="nav-number">1.6.2.</span> <span class="nav-text">题目源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writeup-3"><span class="nav-number">1.6.3.</span> <span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flag-4"><span class="nav-number">1.6.4.</span> <span class="nav-text">flag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#md5%E7%A2%B0%E6%92%9E%E6%A0%B7%E4%BE%8B"><span class="nav-number">1.6.5.</span> <span class="nav-text">md5碰撞样例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05%E6%95%B0%E7%BB%84%E8%BF%94%E5%9B%9ENULL%E7%BB%95%E8%BF%87"><span class="nav-number">1.7.</span> <span class="nav-text">0x05数组返回NULL绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%9C%B0%E5%9D%80-5"><span class="nav-number">1.7.1.</span> <span class="nav-text">题目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%BA%90%E7%A0%81-5"><span class="nav-number">1.7.2.</span> <span class="nav-text">题目源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writeup-4"><span class="nav-number">1.7.3.</span> <span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flag-5"><span class="nav-number">1.7.4.</span> <span class="nav-text">flag</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x06%E5%BC%B1%E7%B1%BB%E5%9E%8B%E6%95%B4%E6%95%B0%E5%A4%A7%E5%B0%8F%E6%AF%94%E8%BE%83%E7%BB%95%E8%BF%87"><span class="nav-number">1.8.</span> <span class="nav-text">0x06弱类型整数大小比较绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%9C%B0%E5%9D%80-6"><span class="nav-number">1.8.1.</span> <span class="nav-text">题目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%BA%90%E7%A0%81-6"><span class="nav-number">1.8.2.</span> <span class="nav-text">题目源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writeup-5"><span class="nav-number">1.8.3.</span> <span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flag-6"><span class="nav-number">1.8.4.</span> <span class="nav-text">flag</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x07"><span class="nav-number">1.9.</span> <span class="nav-text">0x07</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%9C%B0%E5%9D%80-7"><span class="nav-number">1.9.1.</span> <span class="nav-text">题目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%BA%90%E7%A0%81-7"><span class="nav-number">1.9.2.</span> <span class="nav-text">题目源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writeup-6"><span class="nav-number">1.9.3.</span> <span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flag-7"><span class="nav-number">1.9.4.</span> <span class="nav-text">flag</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%B1%E7%B1%BB%E5%9E%8B%E6%80%BB%E7%BB%93"><span class="nav-number">1.10.</span> <span class="nav-text">弱类型总结</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E6%9D%BE%E6%95%A3%E6%80%A7"><span class="nav-number">1.10.0.1.</span> <span class="nav-text">&#x3D;&#x3D;判断松散性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%9D%BE%E6%95%A3%E6%80%A7"><span class="nav-number">1.10.0.2.</span> <span class="nav-text">函数松散性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x08sha-%E5%87%BD%E6%95%B0%E6%AF%94%E8%BE%83%E7%BB%95%E8%BF%87"><span class="nav-number">1.11.</span> <span class="nav-text">0x08sha()函数比较绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%9C%B0%E5%9D%80-8"><span class="nav-number">1.11.1.</span> <span class="nav-text">题目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%BA%90%E7%A0%81-8"><span class="nav-number">1.11.2.</span> <span class="nav-text">题目源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writeup-7"><span class="nav-number">1.11.3.</span> <span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flag-8"><span class="nav-number">1.11.4.</span> <span class="nav-text">flag</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x09ereg%E6%AD%A3%E5%88%99-00%E6%88%AA%E6%96%AD"><span class="nav-number">1.12.</span> <span class="nav-text">0x09ereg正则%00截断</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%9C%B0%E5%9D%80-9"><span class="nav-number">1.12.1.</span> <span class="nav-text">题目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%BA%90%E7%A0%81-9"><span class="nav-number">1.12.2.</span> <span class="nav-text">题目源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writeup-8"><span class="nav-number">1.12.3.</span> <span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flag-9"><span class="nav-number">1.12.4.</span> <span class="nav-text">flag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bug%EF%BC%9F%EF%BC%9F%EF%BC%9F"><span class="nav-number">1.12.5.</span> <span class="nav-text">bug？？？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00%E6%88%AA%E6%96%AD%E4%B8%8E-00"><span class="nav-number">1.12.6.</span> <span class="nav-text">0x00截断与%00</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%84%9F%E8%A7%89%E8%AE%B2%E8%A7%A3%E8%BF%98%E5%8F%AF%E4%BB%A5%E7%9A%84%E6%96%87%E7%AB%A0"><span class="nav-number">1.12.6.1.</span> <span class="nav-text">感觉讲解还可以的文章</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x10strpos%E6%95%B0%E7%BB%84%E7%BB%95%E8%BF%87"><span class="nav-number">1.13.</span> <span class="nav-text">0x10strpos数组绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%9C%B0%E5%9D%80-10"><span class="nav-number">1.13.1.</span> <span class="nav-text">题目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%BA%90%E7%A0%81-10"><span class="nav-number">1.13.2.</span> <span class="nav-text">题目源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writeup-9"><span class="nav-number">1.13.3.</span> <span class="nav-text">writeup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flag-10"><span class="nav-number">1.13.4.</span> <span class="nav-text">flag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bug%EF%BC%9F%EF%BC%9F%EF%BC%9F-1"><span class="nav-number">1.13.5.</span> <span class="nav-text">bug？？？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%87%E6%B3%A8"><span class="nav-number">1.14.</span> <span class="nav-text">备注</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8C%82%E4%BA%86"><span class="nav-number">1.14.0.1.</span> <span class="nav-text">题目挂了</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%9C%89%E4%B8%A5%E9%87%8Dbug"><span class="nav-number">1.14.0.2.</span> <span class="nav-text">题目有严重bug</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.15.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="D15h35"
+      src="/images/while.png">
+  <p class="site-author-name" itemprop="name">D15h35</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yanmymickey" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yanmymickey" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/yanmymickey" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://yanmymickey.github.io/2019/07/16/CTF_WP/%E5%BC%B1%E7%B1%BB%E5%9E%8B%E7%B1%BB%E5%88%AB%E6%BC%8F%E6%B4%9E%E5%B0%8F%E7%BB%93%E5%92%8Cbugku%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%B0%8F%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/while.png">
+      <meta itemprop="name" content="D15h35">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="菜鸡的BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          bugku代码审计
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-07-16 00:00:00" itemprop="dateCreated datePublished" datetime="2019-07-16T00:00:00+08:00">2019-07-16</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-01-16 09:32:42" itemprop="dateModified" datetime="2021-01-16T09:32:42+08:00">2021-01-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/PHP/" itemprop="url" rel="index"><span itemprop="name">PHP</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="bugku代码审计"><a href="#bugku代码审计" class="headerlink" title="bugku代码审计"></a>bugku代码审计</h1><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>一下只是个人的一点拙见，请大佬轻喷，欢迎大佬补充，很多不恰当的地方。</p>
+<a id="more"></a>
+
+<h2 id="0x00-extract变量覆盖"><a href="#0x00-extract变量覆盖" class="headerlink" title="0x00 extract变量覆盖"></a>0x00 extract变量覆盖</h2><h3 id="题目地址"><a href="#题目地址" class="headerlink" title="题目地址"></a><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/1.php">题目地址</a></h3><h3 id="题目源码"><a href="#题目源码" class="headerlink" title="题目源码"></a>题目源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$flag&#x3D;&#39;xxx&#39;;</span><br><span class="line">extract($_GET);</span><br><span class="line">if(isset($shiyan))&#123;</span><br><span class="line">	$content&#x3D;trim(file_get_contents($flag));</span><br><span class="line">	if($shiyan&#x3D;&#x3D;$content)&#123;</span><br><span class="line">		echo&#39;flag&#123;xxx&#125;&#39;;</span><br><span class="line">	&#125;</span><br><span class="line">	else&#123;</span><br><span class="line">		echo&#39;Oh.no&#39;;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="writeip"><a href="#writeip" class="headerlink" title="writeip"></a>writeip</h3><ol>
+<li><p>构造payload:</p>
+<p><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/1.php?shjyan=&amp;flag=">http://123.206.87.240:9009/1.php?shjyan=&amp;flag=</a></p>
+<p>覆盖原有的flag变量，是空==空成立，输出flag</p>
+</li>
+</ol>
+<h3 id="flag"><a href="#flag" class="headerlink" title="flag"></a>flag</h3><p>flag{bugku-dmsj-p2sm3N}</p>
+<h3 id="extract用法"><a href="#extract用法" class="headerlink" title="extract用法"></a>extract用法</h3><p>(PHP 4, PHP 5, PHP 7)</p>
+<p>extract — 从数组中将变量导入到当前的符号表</p>
+<h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extract ( array &amp;$array [, int $flags &#x3D; EXTR_OVERWRITE [, string $prefix &#x3D; NULL ]] ) : int</span><br></pre></td></tr></table></figure>
+<p> 本函数用来将变量从数组中导入到当前的符号表中。</p>
+<p> 检查每个键名看是否可以作为一个合法的变量名，同时也检查和符号表中已有的变量名的冲突。</p>
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><ul>
+<li><p><code>array</code></p>
+<p> 一个关联数组。此函数会将键名当作变量名，值作为变量的值。对每个键／值对都会在当前的符号表中建立变量，并受到 <code>flags</code>和<code>prefix</code>参数的影响。必须使用关联数组，数字索引的数组将不会产生结果，除非用了<code>EXTR_PREFIX_ALL</code>或者<code>EXTR_PREFIX_INVALID</code>。</p>
+</li>
+<li><p><code>flags</code></p>
+<p>对待非法／数字和冲突的键名的方法将根据取出标记<code>flags</code>参数决定。可以是以下值之一：</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>EXTR_OVERWRITE</code></td>
+<td align="left">如果有冲突，覆盖已有的变量。</td>
+</tr>
+<tr>
+<td align="left"><code>EXTR_SKIP</code></td>
+<td align="left">如果有冲突，不覆盖已有的变量。</td>
+</tr>
+<tr>
+<td align="left"><code>EXTR_PREFIX_SAME</code></td>
+<td align="left">如果有冲突，在变量名前加上前缀 <code>prefix</code>。</td>
+</tr>
+<tr>
+<td align="left"><code>EXTR_PREFIX_ALL</code></td>
+<td align="left">给所有变量名加上前缀<code>prefix</code>。</td>
+</tr>
+<tr>
+<td align="left"><code>EXTR_PREFIX_INVALID</code></td>
+<td align="left">仅在非法／数字的变量名前加上前缀 <code>prefix</code>。</td>
+</tr>
+<tr>
+<td align="left"><code>EXTR_IF_EXISTS</code></td>
+<td align="left">仅在当前符号表中已有同名变量时，覆盖它们的值。其它的都不处理。举个例子，以下情况非常有用：定义一些有效变量，然后从 <code>$_REQUEST</code> 中仅导入这些已定义的变量。</td>
+</tr>
+<tr>
+<td align="left"><code>EXTR_PREFIX_IF_EXISTS</code></td>
+<td align="left">仅在当前符号表中已有同名变量时，建立附加了前缀的变量名，其它的都不处理。</td>
+</tr>
+<tr>
+<td align="left"><code>EXTR_REFS</code></td>
+<td align="left">将变量作为引用提取。这有力地表明了导入的变量仍然引用了<code>array</code> 参数的值。可以单独使用这个标志或者在<code>flags</code> 中用 OR 与其它任何标志结合使用。</td>
+</tr>
+<tr>
+<td align="left">备注</td>
+<td align="left">如果没有指定 flags，则被假定为 <code>EXTR_OVERWRITE</code>。</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><code>prefix</code></p>
+<p>注意 ：</p>
+<p><code>prefix</code>仅在<code>flags</code>的值是<code>EXTR_PREFIX_SAME</code>，<code>EXTR_PREFIX_ALL</code>，<code>EXTR_PREFIX_INVALID</code>或 <code>EXTR_PREFIX_IF_EXISTS</code>时需要。</p>
+<p>如果附加了前缀后的结果不是合法的变量名，将不会导入到符号表中。前缀和数组键名之间会自动加上一个下划线。</p>
+</li>
+</ul>
+<h4 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h4><p> 返回成功导入到符号表中的变量数目。</p>
+<h2 id="0x01strcmp比较字符串"><a href="#0x01strcmp比较字符串" class="headerlink" title="0x01strcmp比较字符串"></a>0x01strcmp比较字符串</h2><h3 id="题目地址-1"><a href="#题目地址-1" class="headerlink" title="题目地址"></a><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/6.php">题目地址</a></h3><h3 id="题目源码-1"><a href="#题目源码-1" class="headerlink" title="题目源码"></a>题目源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$flag &#x3D; &quot;flag&#123;xxxxx&#125;&quot;;</span><br><span class="line">if (isset($_GET[&#39;a&#39;])) &#123; </span><br><span class="line">	if (strcmp($_GET[&#39;a&#39;], $flag) &#x3D;&#x3D; 0) &#x2F;&#x2F;如果 str1 小于 str2 返回 &lt; 0； 如果 str1大于 str2返回 &gt; 0；如果两者相等，返回 0。 </span><br><span class="line">        &#x2F;&#x2F;比较两个字符串（区分大小写） </span><br><span class="line">		die(&#39;Flag: &#39;.$flag); </span><br><span class="line">	else </span><br><span class="line">		print &#39;No&#39;;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="writeup"><a href="#writeup" class="headerlink" title="writeup"></a>writeup</h3><ol>
+<li><p>用数组绕过，构造payload:</p>
+<p><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/6.php?a%5B%5D=1">http://123.206.87.240:9009/6.php?a[]=1</a></p>
+</li>
+</ol>
+<h3 id="flag-1"><a href="#flag-1" class="headerlink" title="flag"></a>flag</h3><p>flag{bugku_dmsj_912k}</p>
+<h2 id="0x02urldecode二次编码绕过"><a href="#0x02urldecode二次编码绕过" class="headerlink" title="0x02urldecode二次编码绕过"></a>0x02urldecode二次编码绕过</h2><h3 id="题目地址-2"><a href="#题目地址-2" class="headerlink" title="题目地址"></a><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/10.php">题目地址</a></h3><h3 id="题目源码-2"><a href="#题目源码-2" class="headerlink" title="题目源码"></a>题目源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">if(eregi(&quot;hackerDJ&quot;,$_GET[id])) &#123;</span><br><span class="line">	echo(&quot;not allowed!&quot;);</span><br><span class="line">	exit();</span><br><span class="line">&#125;</span><br><span class="line">$_GET[id] &#x3D; urldecode($_GET[id]);</span><br><span class="line">if($_GET[id] &#x3D;&#x3D; &quot;hackerDJ&quot;)</span><br><span class="line">&#123;</span><br><span class="line">	echo &quot;Access granted!&quot;;</span><br><span class="line">	echo &quot;flag&quot;;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="writeup-1"><a href="#writeup-1" class="headerlink" title="writeup"></a>writeup</h3><ol>
+<li>浏览器会对get参数进行一次URL编码，源码中还有一次，两次编码绕过验证。</li>
+<li>对hackerDJ两次URL编码构造payload:</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/10.php?id=hackerDJ">http://123.206.87.240:9009/10.php?id=%25%36%38%25%36%31%25%36%33%25%36%42%25%36%35%25%37%32%25%34%34%25%34%41</a></p>
+<h3 id="flag-2"><a href="#flag-2" class="headerlink" title="flag"></a>flag</h3><p>flag{bugku__daimasj-1t2}</p>
+<h2 id="0x03md5-函数"><a href="#0x03md5-函数" class="headerlink" title="0x03md5()函数"></a>0x03md5()函数</h2><h3 id="题目地址-3"><a href="#题目地址-3" class="headerlink" title="题目地址"></a><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/18.php">题目地址</a></h3><h3 id="题目源码-3"><a href="#题目源码-3" class="headerlink" title="题目源码"></a>题目源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">error_reporting(0);</span><br><span class="line">$flag &#x3D; &#39;flag&#123;test&#125;&#39;;</span><br><span class="line">if (isset($_GET[&#39;username&#39;]) and isset($_GET[&#39;password&#39;])) &#123;</span><br><span class="line">	if ($_GET[&#39;username&#39;] &#x3D;&#x3D; $_GET[&#39;password&#39;])</span><br><span class="line">		print &#39;Your password can not be your username.&#39;;</span><br><span class="line">	else if (md5($_GET[&#39;username&#39;]) &#x3D;&#x3D;&#x3D; md5($_GET[&#39;password&#39;]))</span><br><span class="line">		die(&#39;Flag: &#39;.$flag);</span><br><span class="line">	else</span><br><span class="line">		print &#39;Invalid password&#39;;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="writeup-2"><a href="#writeup-2" class="headerlink" title="writeup"></a>writeup</h3><ol>
+<li><p><code>(md5($_GET[&#39;username&#39;]) === md5($_GET[&#39;password&#39;]))</code>判断是全等于，所以不可以用碰撞，可以用数组绕过。</p>
+</li>
+<li><p>构造payload：</p>
+<p><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/18.php?username%5B%5D=1&amp;password%5B%5D=2">http://123.206.87.240:9009/18.php?username[]=1&amp;password[]=2</a></p>
+</li>
+</ol>
+<h3 id="flag-3"><a href="#flag-3" class="headerlink" title="flag"></a>flag</h3><p>flag{bugk1u-ad8-3dsa-2}</p>
+<h2 id="0x04md5加密相等绕过"><a href="#0x04md5加密相等绕过" class="headerlink" title="0x04md5加密相等绕过"></a>0x04md5加密相等绕过</h2><h3 id="题目地址-4"><a href="#题目地址-4" class="headerlink" title="题目地址"></a><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/13.php">题目地址</a></h3><h3 id="题目源码-4"><a href="#题目源码-4" class="headerlink" title="题目源码"></a>题目源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$md51 &#x3D; md5(&#39;QNKCDZO&#39;);</span><br><span class="line">$a &#x3D; @$_GET[&#39;a&#39;];</span><br><span class="line">$md52 &#x3D; @md5($a);</span><br><span class="line">if(isset($a))&#123;</span><br><span class="line">	if ($a !&#x3D; &#39;QNKCDZO&#39; &amp;&amp; $md51 &#x3D;&#x3D; $md52) &#123;</span><br><span class="line">		echo &quot;flag&#123;*&#125;&quot;;</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">		echo &quot;false!!!&quot;;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">else&#123;</span><br><span class="line">	echo &quot;please input a&quot;;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="writeup-3"><a href="#writeup-3" class="headerlink" title="writeup"></a>writeup</h3><ol>
+<li><p><code>$md51 == $md52</code>不是全等于，用md5碰撞</p>
+</li>
+<li><p>构造payload：</p>
+<p><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/13.php?a=240610708">http://123.206.87.240:9009/13.php?a=240610708</a></p>
+</li>
+</ol>
+<h3 id="flag-4"><a href="#flag-4" class="headerlink" title="flag"></a>flag</h3><p>flag{bugku-dmsj-am9ls}</p>
+<h3 id="md5碰撞样例"><a href="#md5碰撞样例" class="headerlink" title="md5碰撞样例"></a>md5碰撞样例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">QNKCDZO</span><br><span class="line">0e830400451993494058024219903391</span><br><span class="line"></span><br><span class="line">240610708</span><br><span class="line">0e462097431906509019562988736854</span><br><span class="line"></span><br><span class="line">s878926199a</span><br><span class="line">0e545993274517709034328855841020</span><br><span class="line">  </span><br><span class="line">s155964671a</span><br><span class="line">0e342768416822451524974117254469</span><br><span class="line">  </span><br><span class="line">s214587387a</span><br><span class="line">0e848240448830537924465865611904</span><br><span class="line">  </span><br><span class="line">s214587387a</span><br><span class="line">0e848240448830537924465865611904</span><br><span class="line">  </span><br><span class="line">s878926199a</span><br><span class="line">0e545993274517709034328855841020</span><br><span class="line">  </span><br><span class="line">s1091221200a</span><br><span class="line">0e940624217856561557816327384675</span><br><span class="line">  </span><br><span class="line">s1885207154a</span><br><span class="line">0e509367213418206700842008763514</span><br></pre></td></tr></table></figure>
+<h2 id="0x05数组返回NULL绕过"><a href="#0x05数组返回NULL绕过" class="headerlink" title="0x05数组返回NULL绕过"></a>0x05数组返回NULL绕过</h2><h3 id="题目地址-5"><a href="#题目地址-5" class="headerlink" title="题目地址"></a><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/19.php">题目地址</a></h3><h3 id="题目源码-5"><a href="#题目源码-5" class="headerlink" title="题目源码"></a>题目源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$flag &#x3D; &quot;flag&quot;;</span><br><span class="line">if (isset ($_GET[&#39;password&#39;])) &#123;</span><br><span class="line">	if (ereg (&quot;^[a-zA-Z0-9]+$&quot;, $_GET[&#39;password&#39;]) &#x3D;&#x3D;&#x3D; FALSE)</span><br><span class="line">		echo &#39;You password must be alphanumeric&#39;;</span><br><span class="line">	else if (strpos ($_GET[&#39;password&#39;], &#39;--&#39;) !&#x3D;&#x3D; FALSE)</span><br><span class="line">		die(&#39;Flag: &#39; . $flag);</span><br><span class="line">	else</span><br><span class="line">		echo &#39;Invalid password&#39;;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="writeup-4"><a href="#writeup-4" class="headerlink" title="writeup"></a>writeup</h3><ol>
+<li><p>题目提示很明显</p>
+</li>
+<li><p>数组构造payload：</p>
+<p><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/19.php?password%5B%5D=1">http://123.206.87.240:9009/19.php?password[]=1</a></p>
+</li>
+</ol>
+<h3 id="flag-5"><a href="#flag-5" class="headerlink" title="flag"></a>flag</h3><p>flag{ctf-bugku-ad-2131212}</p>
+<h2 id="0x06弱类型整数大小比较绕过"><a href="#0x06弱类型整数大小比较绕过" class="headerlink" title="0x06弱类型整数大小比较绕过"></a>0x06弱类型整数大小比较绕过</h2><h3 id="题目地址-6"><a href="#题目地址-6" class="headerlink" title="题目地址"></a><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/22.php">题目地址</a></h3><h3 id="题目源码-6"><a href="#题目源码-6" class="headerlink" title="题目源码"></a>题目源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$temp &#x3D; $_GET[&#39;password&#39;];</span><br><span class="line">is_numeric($temp)?die(&quot;no numeric&quot;):NULL;</span><br><span class="line">if($temp&gt;1336)&#123;</span><br><span class="line">	echo $flag;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="writeup-5"><a href="#writeup-5" class="headerlink" title="writeup"></a>writeup</h3><ol>
+<li><p>利用弱类型比较漏洞</p>
+</li>
+<li><p>is_numeric()判断是否为number类型,int float</p>
+</li>
+<li><p>构造payload：</p>
+<p><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/22.php?password=1337a">http://123.206.87.240:9009/22.php?password=1337a</a></p>
+</li>
+</ol>
+<h3 id="flag-6"><a href="#flag-6" class="headerlink" title="flag"></a>flag</h3><p>flag{bugku_null_numeric}</p>
+<h2 id="0x07"><a href="#0x07" class="headerlink" title="0x07"></a>0x07</h2><h3 id="题目地址-7"><a href="#题目地址-7" class="headerlink" title="题目地址"></a><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/20.php">题目地址</a></h3><h3 id="题目源码-7"><a href="#题目源码-7" class="headerlink" title="题目源码"></a>题目源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">error_reporting(0);</span><br><span class="line">function noother_says_correct($temp)&#123;</span><br><span class="line">	$flag &#x3D; &#39;flag&#123;test&#125;&#39;;</span><br><span class="line">	$one &#x3D; ord(&#39;1&#39;); &#x2F;&#x2F;ord — 返回字符的 ASCII 码值</span><br><span class="line">	$nine &#x3D; ord(&#39;9&#39;); &#x2F;&#x2F;ord — 返回字符的 ASCII 码值</span><br><span class="line">	$number &#x3D; &#39;3735929054&#39;;</span><br><span class="line">	&#x2F;&#x2F; Check all the input characters!</span><br><span class="line">	for ($i &#x3D; 0; $i &lt; strlen($number); $i++)&#123;</span><br><span class="line">		&#x2F;&#x2F; Disallow all the digits!</span><br><span class="line">		$digit &#x3D; ord($temp&#123;$i&#125;);</span><br><span class="line">		if ( ($digit &gt;&#x3D; $one) &amp;&amp; ($digit &lt;&#x3D; $nine) )&#123;&#x2F;&#x2F; Aha, digit not allowed!</span><br><span class="line">			return &quot;flase&quot;;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	if($number &#x3D;&#x3D; $temp</span><br><span class="line">		return $flag;</span><br><span class="line">&#125;</span><br><span class="line">$temp &#x3D; $_GET[&#39;password&#39;];</span><br><span class="line">echo noother_says_correct($temp);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="writeup-6"><a href="#writeup-6" class="headerlink" title="writeup"></a>writeup</h3><ol>
+<li><p>利用弱类型比较漏洞,<code>==</code>会将数字自动转换为16进制</p>
+</li>
+<li><p>将3735929054转换为16进制加上控制字符0x</p>
+</li>
+<li><p>利用转换结果0xdeadc0de构造payload：</p>
+<p><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/20.php?password=0xdeadc0de">http://123.206.87.240:9009/20.php?password=0xdeadc0de</a></p>
+</li>
+</ol>
+<h3 id="flag-7"><a href="#flag-7" class="headerlink" title="flag"></a>flag</h3><p>flag{Bugku-admin-ctfdaimash}</p>
+<h2 id="弱类型总结"><a href="#弱类型总结" class="headerlink" title="弱类型总结"></a>弱类型总结</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">2 var_dump(&quot;admin&quot;&#x3D;&#x3D;0);  &#x2F;&#x2F;true</span><br><span class="line">3 var_dump(&quot;1admin&quot;&#x3D;&#x3D;1); &#x2F;&#x2F;true</span><br><span class="line">4 var_dump(&quot;admin1&quot;&#x3D;&#x3D;1) &#x2F;&#x2F;false</span><br><span class="line">5 var_dump(&quot;admin1&quot;&#x3D;&#x3D;0) &#x2F;&#x2F;true</span><br><span class="line">6 var_dump(&quot;0e123456&quot;&#x3D;&#x3D;&quot;0e4456789&quot;); &#x2F;&#x2F;true </span><br><span class="line">7 ?&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="判断松散性"><a href="#判断松散性" class="headerlink" title="==判断松散性"></a>==判断松散性</h4><ol>
+<li>当一个字符串被当作一个数值来取值，其结果和类型如下:如果该字符串没有包含’.’,’e’,’E’并且其数值值在整形的范围之内，该字符串被当作int来取值。其他所有情况下都被作为float来取值，该字符串的开始部分决定了它的值，如果该字符串以合法的数值开始，则使用该数值，否则其值为0。</li>
+<li>在进行比较运算时，如果遇到了0e这类字符串，PHP会将它解析为科学计数法。</li>
+<li>在进行比较运算时，如果遇到了0x这类字符串，PHP会将它解析为十六进制。</li>
+</ol>
+<h4 id="函数松散性"><a href="#函数松散性" class="headerlink" title="函数松散性"></a>函数松散性</h4><ol>
+<li><p><code>switch()</code></p>
+<p>如果<code>switch</code>是<strong>数字类型</strong>的<code>case</code>的判断时，switch会将其中的参数转换为<code>int</code>类型。</p>
+</li>
+<li><p><code>in_array()</code></p>
+<p><code>in_array(search,array,type)</code>: 如果给定的值 search 存在于数组 array 中则返回 true（<strong>类似于==**）。如果第三个参数设置为 true，函数只有在元素存在于数组中且数据类型与给定值相同时才返回 true（</strong>类似于===**）。如果没有在数组中找到参数，函数返回 false。</p>
+</li>
+<li><p><code>is_numeric</code>()</p>
+<p><code>is_numeric</code>在做判断时候，如果攻击者把payload改成十六进制0x…，is_numeric会先对十六进制做类型判断，十六进制被判断为数字型为真，就进入了条件语句，如果再把这个代入进入sql语句进入mysql数据库，mysql数据库会对hex进行解析成字符串存入到数据库中，如果这个字段再被取出来二次利用，就可能造成二次注入漏洞。</p>
+</li>
+<li><p><code>strcmp</code>()</p>
+<p><code>strcmp(string1，string2)</code>:比较括号内的两个字符串string1和string2，当他们两个相等时，返回0；string1的大于string2时，返回&gt;0;小于时返回&lt;0。在5.3及以后的php版本中，当strcmp()括号内是一个数组与字符串比较时，也会返回0。</p>
+</li>
+<li><p><code>md5</code>()</p>
+<p><code>md5 ( string $str [, bool $raw_output = false ] )</code></p>
+<p><code>md5()</code>需要是一个string类型的参数。但是当你传递一个array时，<code>md5()</code>不会报错，只是会无法正确地求出array的md5值，返回null，这样就会导致任意2个array的md5值都会相等。</p>
+</li>
+</ol>
+<h2 id="0x08sha-函数比较绕过"><a href="#0x08sha-函数比较绕过" class="headerlink" title="0x08sha()函数比较绕过"></a>0x08sha()函数比较绕过</h2><h3 id="题目地址-8"><a href="#题目地址-8" class="headerlink" title="题目地址"></a><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/7.php">题目地址</a></h3><h3 id="题目源码-8"><a href="#题目源码-8" class="headerlink" title="题目源码"></a>题目源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$flag &#x3D; &quot;flag&quot;;</span><br><span class="line">if (isset($_GET[&#39;name&#39;]) and isset($_GET[&#39;password&#39;]))&#123;</span><br><span class="line">	var_dump($_GET[&#39;name&#39;]);</span><br><span class="line">	echo &quot;&quot;;</span><br><span class="line">	var_dump($_GET[&#39;password&#39;]);</span><br><span class="line">	var_dump(sha1($_GET[&#39;name&#39;]));</span><br><span class="line">	var_dump(sha1($_GET[&#39;password&#39;]));</span><br><span class="line">	if ($_GET[&#39;name&#39;] &#x3D;&#x3D; $_GET[&#39;password&#39;])</span><br><span class="line">		echo &#39;Your password can not be your name!&#39;;</span><br><span class="line">	else if (sha1($_GET[&#39;name&#39;]) &#x3D;&#x3D;&#x3D; sha1($_GET[&#39;password&#39;]))</span><br><span class="line">		die(&#39;Flag: &#39;.$flag);</span><br><span class="line">	else</span><br><span class="line">		echo &#39;Invalid password.&#39;;</span><br><span class="line">&#125;</span><br><span class="line">else</span><br><span class="line">	echo &#39;Login first&#39;;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="writeup-7"><a href="#writeup-7" class="headerlink" title="writeup"></a>writeup</h3><ol>
+<li><p>数组绕过</p>
+</li>
+<li><p>构造payload：</p>
+<p><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/7.php?name%5B%5D=1&amp;password%5B%5D=2">http://123.206.87.240:9009/7.php?name[]=1&amp;password[]=2</a></p>
+</li>
+</ol>
+<h3 id="flag-8"><a href="#flag-8" class="headerlink" title="flag"></a>flag</h3><p>flag{bugku–daimasj-a2}</p>
+<h2 id="0x09ereg正则-00截断"><a href="#0x09ereg正则-00截断" class="headerlink" title="0x09ereg正则%00截断"></a>0x09ereg正则%00截断</h2><h3 id="题目地址-9"><a href="#题目地址-9" class="headerlink" title="题目地址"></a><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/5.php">题目地址</a></h3><h3 id="题目源码-9"><a href="#题目源码-9" class="headerlink" title="题目源码"></a>题目源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$flag &#x3D; &quot;xxx&quot;;</span><br><span class="line">if (isset ($_GET[&#39;password&#39;]))&#123;</span><br><span class="line">	if (ereg (&quot;^[a-zA-Z0-9]+$&quot;, $_GET[&#39;password&#39;]) &#x3D;&#x3D;&#x3D; FALSE)&#123;</span><br><span class="line">		echo &#39;You password must be alphanumeric&#39;;</span><br><span class="line">	&#125;</span><br><span class="line">	else if (strlen($_GET[&#39;password&#39;]) &lt; 8 &amp;&amp; $_GET[&#39;password&#39;] &gt; 9999999)&#123;</span><br><span class="line">		if (strpos ($_GET[&#39;password&#39;], &#39;-&#39;) !&#x3D;&#x3D; FALSE)&#123;&#x2F;&#x2F;strpos — 查找字符串首次出现的位置</span><br><span class="line">			die(&#39;Flag: &#39; . $flag);</span><br><span class="line">		&#125;</span><br><span class="line">		else&#123;</span><br><span class="line">			echo(&#39;have not been found&#39;);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	else&#123;</span><br><span class="line">		echo &#39;Invalid password&#39;;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="writeup-8"><a href="#writeup-8" class="headerlink" title="writeup"></a>writeup</h3><ol>
+<li><p><code>if (ereg (&quot;^[a-zA-Z0-9]+$&quot;, $_GET[&#39;password&#39;]) === FALSE)</code><br>password匹配必须 a-z A-Z 0-9 之中</p>
+<p>这个可以用%00截断</p>
+</li>
+<li><p><code>if (strlen($_GET[&#39;password&#39;]) &lt; 8 &amp;&amp; $_GET[&#39;password&#39;] &gt; 9999999)</code></p>
+<p>password小于8位数 且 大于9999999</p>
+</li>
+<li><p><code>if (strpos ($_GET[&#39;password&#39;], &#39;-&#39;) !== FALSE)</code></p>
+<p>数组绕过同时也可以绕过这个</p>
+</li>
+<li><p>构造payload：</p>
+<p>[<a target="_blank" rel="noopener" href="http://123.206.87.240:9009/5.php?password%5B%5C%5D=0%00%5D(http://123.206.87.240:9009/5.php?password%5B%5D=0%00)">http://123.206.87.240:9009/5.php?password[\]=0%00](http://123.206.87.240:9009/5.php?password[]=0 )</a></p>
+</li>
+</ol>
+<h3 id="flag-9"><a href="#flag-9" class="headerlink" title="flag"></a>flag</h3><p>flag{bugku-dm-sj-a12JH8}</p>
+<h3 id="bug？？？"><a href="#bug？？？" class="headerlink" title="bug？？？"></a>bug？？？</h3><p>不知道为什么，构造payload:</p>
+<p><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/5.php?password%5B%5D=">http://123.206.87.240:9009/5.php?password[]=</a></p>
+<p>也可以，同理</p>
+<p>[<a target="_blank" rel="noopener" href="http://123.206.87.240:9009/5.php?password%5B%5C%5D=0%00%5D(http://123.206.87.240:9009/5.php?password%5B%5D=0%00)">http://123.206.87.240:9009/5.php?password[\]=0%00](http://123.206.87.240:9009/5.php?password[]=0 )</a></p>
+<p>也可以。。。。。bug？？？就(⊙_⊙)？</p>
+<h3 id="0x00截断与-00"><a href="#0x00截断与-00" class="headerlink" title="0x00截断与%00"></a>0x00截断与%00</h3><p>0x00是十六进制表示方法，是ascii码为0的字符，在有些函数处理时，会把这个字符当做结束符。这个可以用在对文件类型名的绕过上。当然某些比较函数会当成结束符，从而达到绕过验证的效果。</p>
+<h4 id="感觉讲解还可以的文章"><a href="#感觉讲解还可以的文章" class="headerlink" title="感觉讲解还可以的文章"></a>感觉讲解还可以的文章</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/zpy1998zpy/article/details/80545408">地址1</a></p>
+<p><a target="_blank" rel="noopener" href="http://blog.csdn.net/hitwangpeng/article/details/47042971">地址2</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.2cto.com/article/201502/377462.html">地址3</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.2cto.com/article/201110/108975.htm">地址4</a></p>
+<p>建议自己实验一遍。</p>
+<h2 id="0x10strpos数组绕过"><a href="#0x10strpos数组绕过" class="headerlink" title="0x10strpos数组绕过"></a>0x10strpos数组绕过</h2><h3 id="题目地址-10"><a href="#题目地址-10" class="headerlink" title="题目地址"></a><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/15.php">题目地址</a></h3><h3 id="题目源码-10"><a href="#题目源码-10" class="headerlink" title="题目源码"></a>题目源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$flag &#x3D; &quot;flag&quot;;</span><br><span class="line">if (isset ($_GET[&#39;ctf&#39;])) &#123;</span><br><span class="line">	if (@ereg (&quot;^[1-9]+$&quot;, $_GET[&#39;ctf&#39;]) &#x3D;&#x3D;&#x3D; FALSE)</span><br><span class="line">		echo &#39;必须输入数字才行&#39;;</span><br><span class="line">	else if (strpos ($_GET[&#39;ctf&#39;], &#39;#biubiubiu&#39;) !&#x3D;&#x3D; FALSE)</span><br><span class="line">		die(&#39;Flag: &#39;.$flag);</span><br><span class="line">	else</span><br><span class="line">		echo &#39;骚年，继续努力吧啊~&#39;;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="writeup-9"><a href="#writeup-9" class="headerlink" title="writeup"></a>writeup</h3><ol>
+<li><p><code>if (@ereg (&quot;^[1-9]+$&quot;, $_GET[&#39;ctf&#39;])</code></p>
+<p>必须输入数字</p>
+</li>
+<li><p><code>if (strpos ($_GET[&#39;ctf&#39;], &#39;#biubiubiu&#39;) !== FALSE)</code></p>
+<p>传过来的字符串要匹配一次<code>#biubiubiu</code></p>
+</li>
+<li><p>题目提示很明显，所以利用数组绕过</p>
+</li>
+<li><p>构造payload:</p>
+<p><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/15.php?ctf%5B%5D=#biubiubiu">http://123.206.87.240:9009/15.php?ctf[]=#biubiubiu</a></p>
+</li>
+</ol>
+<h3 id="flag-10"><a href="#flag-10" class="headerlink" title="flag"></a>flag</h3><p>flag{Bugku-D-M-S-J572}</p>
+<h3 id="bug？？？-1"><a href="#bug？？？-1" class="headerlink" title="bug？？？"></a>bug？？？</h3><p>构造payload:</p>
+<p><a target="_blank" rel="noopener" href="http://123.206.87.240:9009/15.php?ctf%5B%5D=">http://123.206.87.240:9009/15.php?ctf[]=</a></p>
+<p>也可以得到flag，bug？？？(⊙_⊙)？</p>
+<h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><h4 id="题目挂了"><a href="#题目挂了" class="headerlink" title="题目挂了"></a>题目挂了</h4><p>变量覆盖</p>
+<p>简单的waf</p>
+<h4 id="题目有严重bug"><a href="#题目有严重bug" class="headerlink" title="题目有严重bug"></a>题目有严重bug</h4><p>数字验证正则绕过</p>
+<p>直接post一个password=就可以拿到flag</p>
+<p>不过有个可能值得看看的文章</p>
+<p><a target="_blank" rel="noopener" href="https://foxgrin.github.io/posts/25617/">地址</a></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>代码审计是一项基本技能，就是看代码，找相关函数的验证漏洞，绕过验证，sql注入可以类比。</p>
+<p>bugku的这几道代码审计题目质量其实不够高，但是他单独拎出来，说明这种能力很重要。看看，学习一些只是也是很好的，找到了flag，不要满足，继续审计一下，php官方文档是个好东西。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="D15h35 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.jpg" alt="D15h35 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/CTF/" rel="tag"><i class="fa fa-tag"></i> CTF</a>
+              <a href="/tags/php%E5%BC%B1%E7%B1%BB%E5%9E%8B/" rel="tag"><i class="fa fa-tag"></i> php弱类型</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/07/15/Note/JavaScript%E6%A8%A1%E6%9D%BF/" rel="prev" title="JavaScript 模板">
+                  <i class="fa fa-chevron-left"></i> JavaScript 模板
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/07/16/CTF_WP/bugku_web11/" rel="next" title="bugku_web11">
+                  bugku_web11 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">D15h35</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+  <script>
+    NProgress.configure({
+      showSpinner: true
+    });
+    NProgress.start();
+    document.addEventListener('readystatechange', () => {
+      if (document.readyState === 'interactive') {
+        NProgress.inc(0.8);
+      }
+      if (document.readyState === 'complete') {
+        NProgress.done();
+      }
+    });
+    document.addEventListener('pjax:send', () => {
+      NProgress.start();
+    });
+    document.addEventListener('pjax:success', () => {
+      NProgress.done();
+    });
+  </script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

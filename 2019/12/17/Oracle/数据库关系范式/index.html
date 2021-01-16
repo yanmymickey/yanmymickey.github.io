@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="YGm-O0FYtJIJd878GKblZACh8xSr46g0l4F5UDGhoTc">
+  <meta name="baidu-site-verification" content="code-tyOuGzoN3z">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css">
+  <script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yanmymickey.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="数据库关系范式数据依赖关系模式中的各属性之间相互依赖、相互制约的联系称为数据依赖  函数依赖  多值依赖  连接依赖">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库关系范式">
+<meta property="og:url" content="https://yanmymickey.github.io/2019/12/17/Oracle/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%85%B3%E7%B3%BB%E8%8C%83%E5%BC%8F/index.html">
+<meta property="og:site_name" content="菜鸡的BLOG">
+<meta property="og:description" content="数据库关系范式数据依赖关系模式中的各属性之间相互依赖、相互制约的联系称为数据依赖  函数依赖  多值依赖  连接依赖">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-01-16T06:19:06.337Z">
+<meta property="article:author" content="D15h35">
+<meta property="article:tag" content="Note">
+<meta property="article:tag" content="oracle">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://yanmymickey.github.io/2019/12/17/Oracle/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%85%B3%E7%B3%BB%E8%8C%83%E5%BC%8F/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>数据库关系范式 | 菜鸡的BLOG</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XZVDBPC6X7"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XZVDBPC6X7');
+      }
+    </script>
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?633ffcf7a0f511eb45dead6c18798c6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="菜鸡的BLOG" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">菜鸡的BLOG</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">31</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">16</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">58</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%85%B3%E7%B3%BB%E8%8C%83%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">数据库关系范式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%BE%9D%E8%B5%96"><span class="nav-number">1.1.</span> <span class="nav-text">数据依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%BC%8F%E5%BA%94%E6%BB%A1%E8%B6%B3%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%A6%81%E6%B1%82"><span class="nav-number">1.2.</span> <span class="nav-text">关系模式应满足的基本要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E5%85%A8%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96%E5%92%8C%E9%83%A8%E5%88%86%E5%87%BD%E6%95%B0%E4%BE%9D%E8%B5%96"><span class="nav-number">1.3.</span> <span class="nav-text">完全函数依赖和部分函数依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8C%83%E5%BC%8F"><span class="nav-number">1.4.</span> <span class="nav-text">范式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E8%8C%83%E5%BC%8F"><span class="nav-number">1.4.1.</span> <span class="nav-text">第一范式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E8%8C%83%E5%BC%8F"><span class="nav-number">1.4.2.</span> <span class="nav-text">第二范式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E8%8C%83%E5%BC%8F"><span class="nav-number">1.4.3.</span> <span class="nav-text">第三范式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BC%E8%8C%83%E5%BC%8F"><span class="nav-number">1.4.4.</span> <span class="nav-text">BC范式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E8%8C%83%E5%BC%8F"><span class="nav-number">1.4.5.</span> <span class="nav-text">第四范式</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="D15h35"
+      src="/images/while.png">
+  <p class="site-author-name" itemprop="name">D15h35</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yanmymickey" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yanmymickey" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/yanmymickey" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://yanmymickey.github.io/2019/12/17/Oracle/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%85%B3%E7%B3%BB%E8%8C%83%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/while.png">
+      <meta itemprop="name" content="D15h35">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="菜鸡的BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据库关系范式
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-12-17 00:00:00" itemprop="dateCreated datePublished" datetime="2019-12-17T00:00:00+08:00">2019-12-17</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-01-16 14:19:06" itemprop="dateModified" datetime="2021-01-16T14:19:06+08:00">2021-01-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Note/" itemprop="url" rel="index"><span itemprop="name">Note</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Note/Oracle/" itemprop="url" rel="index"><span itemprop="name">Oracle</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="数据库关系范式"><a href="#数据库关系范式" class="headerlink" title="数据库关系范式"></a>数据库关系范式</h1><h2 id="数据依赖"><a href="#数据依赖" class="headerlink" title="数据依赖"></a>数据依赖</h2><p><strong>关系模式中的各属性之间相互依赖、相互制约的联系称为数据依赖</strong></p>
+<ul>
+<li><p>函数依赖</p>
+</li>
+<li><p>多值依赖</p>
+</li>
+<li><p>连接依赖</p>
+<a id="more"></a>
+<h2 id="关系模式应满足的基本要求"><a href="#关系模式应满足的基本要求" class="headerlink" title="关系模式应满足的基本要求"></a>关系模式应满足的基本要求</h2></li>
+<li><p>数据库中的数据冗余应该尽可能的少</p>
+</li>
+<li><p>关系数据库不能因为数据更新操作而引起数据不一致的问题</p>
+</li>
+<li><p>插入数据时，不能产生插入异常现象</p>
+</li>
+<li><p>删除数据时，不能产生删除异常现象</p>
+</li>
+<li><p>数据库设计应考虑查询要求，数据组织应合理</p>
+</li>
+</ul>
+<h2 id="完全函数依赖和部分函数依赖"><a href="#完全函数依赖和部分函数依赖" class="headerlink" title="完全函数依赖和部分函数依赖"></a>完全函数依赖和部分函数依赖</h2><p>(Sno,Cno)-&gt;Grade(完全函数依赖)</p>
+<p>学号和课程号组成集合才能一定推出唯一的成绩，所以(Sno,Cno)为决定因素</p>
+<p>因为Sno-&gt;Age所以(Sno,Cno)-&gt;Age(部分函数依赖)</p>
+<p>学号是学号和课程号组成集合的子集,而学号就可以推出年龄,所以年龄部分函数依赖于(Sno,Cno)这个集合</p>
+<p><strong>说明</strong></p>
+<ul>
+<li>只用当决定因素是组合属性时，讨论部分函数依赖才有意义</li>
+<li>当决定是单属性时，只能是完全函数依赖</li>
+<li>例如，在关系模式S（SNO，SN，AGE，DEPT），决定因素为单属性SNO，有SNO-&gt;（SN，AGE，DEPT），不存在部分函数依赖。</li>
+</ul>
+<h2 id="范式"><a href="#范式" class="headerlink" title="范式"></a>范式</h2><ul>
+<li><strong>基本思想：</strong>消除关系模式中的数据冗余，消除数据依赖中的不合适的部分，解决数据插入、删除时发生异常现象</li>
+<li><strong>范式：</strong>把关系数据库设计出来的关系模式要满足一定的条件。</li>
+<li><strong>第一范式：</strong>满足基本规范要求的关系模式</li>
+<li><strong>第二范式：</strong>在第一范式中进一步满足一些要求</li>
+<li><strong>第三范式：</strong>以此类推产生了第三范式等概念</li>
+<li><strong>注意：</strong>每个范式都规定了一些限制条件</li>
+</ul>
+<h3 id="第一范式"><a href="#第一范式" class="headerlink" title="第一范式"></a>第一范式</h3><ul>
+<li><strong>定义：</strong>如果一个关系模式R中的所有属性都是不可分的最小数据项，则R∈1NF</li>
+<li>注意：<ul>
+<li>NF是关系模式的一个最起码的要求</li>
+<li>不满足1NF的数据库模式不能称之为关系数据库</li>
+<li>但满足1NF的关系模式不一定是好的关系模式</li>
+</ul>
+</li>
+</ul>
+<h3 id="第二范式"><a href="#第二范式" class="headerlink" title="第二范式"></a>第二范式</h3><ul>
+<li><strong>定义：</strong>如果关系模式R∈1NF，且R中每一个非主属性完全函数依赖于码，则R∈2NF</li>
+<li>结论：<ol>
+<li>从1NF关系中消除非主属性对关系键的部分函数依赖，则可得到2NF关系</li>
+<li>如果R的关系为单属性，或R的全体属性均为主属性，则R∈2NF</li>
+</ol>
+</li>
+<li>2NF规范化<ul>
+<li>2NF规范化是指把1NF关系模式通过投影分解转换成2NF关系模式的集合</li>
+<li>分解时遵循的基本原则就是“一事一地”，让一个关系只描述一个实体或者实体间的联系。如果多于一个实体或联系，则进行投影分解</li>
+</ul>
+</li>
+</ul>
+<h3 id="第三范式"><a href="#第三范式" class="headerlink" title="第三范式"></a>第三范式</h3><ul>
+<li><strong>定义：</strong>如果关系模式R∈2NF，且R中每个非主属性都不传递依赖于码，则R∈3NF</li>
+<li>3NF规范化：<ul>
+<li>3NF是指把2NF关系模式通过投影分解转换成3NF关系模式的集合</li>
+<li>和2NF规范化时遵循的原则相同，即“一事一地”，让一个关系只描述一个实体或者实体间的联系</li>
+</ul>
+</li>
+</ul>
+<h3 id="BC范式"><a href="#BC范式" class="headerlink" title="BC范式"></a>BC范式</h3><ul>
+<li><strong>定义：</strong>关系模式R(U,F)∈1NF，若对R的每个函数依赖x-&gt;y，有x必含候选码，则R∈BCNF</li>
+<li>优点：<ul>
+<li>数据冗余降低</li>
+<li>不存在插入异常</li>
+<li>不存在删除异常</li>
+<li>不存在更新异常</li>
+</ul>
+</li>
+<li>性质：<ul>
+<li>若R∈BCNF，则R∈2NF</li>
+<li>若R∈BCNF，则R∈3NF</li>
+<li>若R∈3NF，则R不一定是BCNF</li>
+<li>若R∈3NF，且候选码唯一，则R是BCNF</li>
+</ul>
+</li>
+</ul>
+<h3 id="第四范式"><a href="#第四范式" class="headerlink" title="第四范式"></a>第四范式</h3><ul>
+<li><strong>定义：</strong>关系模式R(U,D)∈1NF，U是属性全集，x，y是U的子集，D是R上的数据依赖集，如果对R的每个非平凡多值依赖X-&gt;-&gt;y，x都含候选码，则R∈4NF。</li>
+<li></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(1) R是BCNF。R候选关键字为XY，F中只有一个函数依赖，而该函数依赖的左部包含了R的候选关键字。</span><br><span class="line"></span><br><span class="line">   (2) R是3NF。R候选关键字为X Y和XZ，R中所有属性都是主属性，不存在非主属性对候选关键字的传递依赖。</span><br><span class="line"></span><br><span class="line">   (3) R是BCNF。R候选关键字为X和Y，因为X→YZ，所以X→Y，X→Z，由于F中有Y→Z，Y→X，因此Z是直接函数依赖于X，而不是传递依赖于X。又因为F的每一函数依赖的左部都包含了任一候选关键字，所以R是BCNF。</span><br><span class="line"></span><br><span class="line">   (4) R是BCNF。R候选关键字为X，而且F中每一个函数依赖的左部包含了候选关键字X。</span><br><span class="line"></span><br><span class="line">   (5) R是1NF。R候选关键字为WX，则Y，Z为非主属性，又由于X→Z，因此F中存在非主属性对候选关键字的部分函数依赖</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="D15h35 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.jpg" alt="D15h35 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Note/" rel="tag"><i class="fa fa-tag"></i> Note</a>
+              <a href="/tags/oracle/" rel="tag"><i class="fa fa-tag"></i> oracle</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/12/17/Oracle/%E7%AC%AC10%E5%91%A8%E8%AF%BE/" rel="prev" title="数据库安全">
+                  <i class="fa fa-chevron-left"></i> 数据库安全
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/12/17/Oracle/sql%E7%BA%A6%E6%9D%9F/" rel="next" title="sql约束">
+                  sql约束 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">D15h35</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+  <script>
+    NProgress.configure({
+      showSpinner: true
+    });
+    NProgress.start();
+    document.addEventListener('readystatechange', () => {
+      if (document.readyState === 'interactive') {
+        NProgress.inc(0.8);
+      }
+      if (document.readyState === 'complete') {
+        NProgress.done();
+      }
+    });
+    document.addEventListener('pjax:send', () => {
+      NProgress.start();
+    });
+    document.addEventListener('pjax:success', () => {
+      NProgress.done();
+    });
+  </script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

