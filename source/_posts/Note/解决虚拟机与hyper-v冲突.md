@@ -1,9 +1,9 @@
 ---
-title: Mysql数据库
-date: 2019-05-20
-tags: [Note,mysql]
+title: 虚拟机与hyper-v冲突
+date: 2020-03-17
+tags: [Note,windows,hyper-v]
 categories:
-- [Note,Mysql]
+- [Note,Windows]
 comments: false
 ---
 # 虚拟机与hyper-v冲突
